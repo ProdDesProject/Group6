@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Welcome from "./components/welcome";
+import Welcome from "./components/Mainpage";
 
 export default class App extends Component {
   constructor(props) {
