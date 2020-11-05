@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Welcome from "./components/welcome";
+import Login from "./components/Login";
 
 export default class App extends Component {
   constructor(props) {
@@ -13,6 +14,12 @@ export default class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
+      <Route
+            path="/"
+            render={routerProps => (
+              <Login {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
       <Route
             path="/"
             render={routerProps => (
