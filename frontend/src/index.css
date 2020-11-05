@@ -8,6 +8,12 @@ li{
   font-size: 18px;
 }
 .container{
+  /*
+  background: url("https://media.giphy.com/media/QKWb49EBsGpDXdwt41/giphy.gif");
+  background-size: 60%;
+  background-repeat: round;
+  background-position: center;
+  */
   background: url("http://35.237.249.63/forbes-insights/wp-content/uploads/2018/05/dell-background.jpg");
   text-align: center;
   margin-top: 2%;
@@ -48,4 +54,32 @@ li{
   font-size: 16px;
   margin-top: 15px;
   font-weight: bold;
+}
+.menu-item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  background-color:rgba(255, 255, 255, 0.6);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #06308b;
+}
+
+.menu-item:hover {
+  background-color: #888c99;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 58px;
+  width: 300px;
+  transform: translateX(-45%);
+  background-color: var(--bg);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  overflow: hidden;
+  transition: height var(--speed) ease;
 }
