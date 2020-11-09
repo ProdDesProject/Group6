@@ -37,7 +37,7 @@ li{
   position: relative;
   height: 200px;
   float: right;
-  margin-right: 5%;
+  margin-right: 7%;
 }
 .robotText{
   float: left;
@@ -46,35 +46,36 @@ li{
 #learnMore{
   background-color: #2edddd; 
   border: none;
-  color: rgb(38, 40, 129);
+  color: #06308b;;
   padding: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin-top: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-weight: bold;
 }
 .menu-item {
-  height: 50px;
   display: flex;
   align-items: center;
   border-radius: var(--border-radius);
   padding: 0.5rem;
-  background-color:rgba(255, 255, 255, 0.6);
-  padding-top: 20px;
+  background-color:rgba(255, 255, 255, 0.9);
   padding-bottom: 20px;
   color: #06308b;
+  overflow: hidden;
 }
 
 .menu-item:hover {
   background-color: #888c99;
+  text-decoration: none;
 }
 
 .dropdownMenu {
   position: absolute;
   top: 58px;
-  width: 300px;
+  width: 30%;
   transform: translateX(-45%);
   background-color: var(--bg);
   border: var(--border);
@@ -82,4 +83,30 @@ li{
   padding: 1rem;
   overflow: hidden;
   transition: height var(--speed) ease;
+  z-index:1000
+}
+
+.profile{
+  border-width: 2px;
+  border-bottom: #06308b;
+  border-bottom-style: double;
+}
+.robotimg{
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #06308b;
+  display: block;
+  margin-left: auto;  
+  margin-right: auto;  
+}
+.chooserob{
+  text-align: center;
+  color: white;
+}
+.card{
+  margin: 30px 40px 30px 40px;
+  color: #06308b;
+  cursor: pointer;
+  background-image: url("https://www.99images.com/photos/wallpapers/creative-graphics/pastel-blue-greenandroid-iphone-desktop-hd-backgrounds-wallpapers-1080p-4k-wyw5j.jpg?v=1578167584") ;
 }

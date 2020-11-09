@@ -1,16 +1,18 @@
 import React  from "react";
+import {Link} from 'react-router-dom'
 
 function DropdownMenu(){
     function DropdownItem(props){
-        return (<a className="menu-item" href="#">
+        return (<Link to={props.path} className="menu-item">
                     <span className="icon-button">{props.icon}</span>
                     {props.children}
-                </a>);
+                </Link>);
     }
     return (<div className="dropdownMenu">
-                <DropdownItem icon={<i class="far fa-calendar-check"></i>}>&nbsp;My reservations</DropdownItem>
-                <DropdownItem icon={<i class="fas fa-edit"></i>}>&nbsp;Make a reservation</DropdownItem>
-                <DropdownItem icon={<i class="fas fa-history"></i>}>&nbsp;History</DropdownItem>
+                <div className="menu-item profile">Hello<br/>kodael00</div>
+                <DropdownItem icon={<i class="far fa-calendar-check"></i>} path="/User/Myreservations">&nbsp;My reservations</DropdownItem>
+                <DropdownItem icon={<i class="fas fa-edit"></i>} path="/User/Chooserobot">&nbsp;Make a reservation</DropdownItem>
+                <DropdownItem icon={<i class="fas fa-history"></i>} path="/User/History">&nbsp;History</DropdownItem>
             </div>)
 }
 export default DropdownMenu;

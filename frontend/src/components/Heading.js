@@ -1,6 +1,19 @@
 import React, { useState } from "react";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter, Route, Link } from 'react-router-dom'
+import  DropdownMenu from './DropdownMenu';
+
+function Header(){
+    return (
+        <header>
+            <Heading>
+              <NavItem item="Login" path="/Login"/>;
+              <NavItem item={<i class='fas fa-home'></i>} path="/"/>
+              <NavItem item={<i class="fas fa-bars"></i>}><DropdownMenu/></NavItem>;
+            </Heading>
+        </header>
+      );
+}
 
 function Heading(props) {
   return (<nav className="navbar bg-dark navbar-expand-lg navbar-dark">
@@ -17,14 +30,15 @@ function NavItem(props){
 
     const [openmenu, setOpenmenu] = useState(false);
 
+    //change it to props.items
     return (<li className="nav-item">
-                <a className="nav-link" href="#" onClick={() => setOpenmenu(!openmenu)}>
+                <Link to={props.path} className="nav-link" onClick={() => setOpenmenu(!openmenu)}>
                     {props.item}
-                </a>
+                </Link>
                 {openmenu && props.children}
             </li>
             );
 }
 
 
-export { Heading, NavItem };
+export default Header;
