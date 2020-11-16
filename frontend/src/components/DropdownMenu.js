@@ -9,10 +9,9 @@ function DropdownMenu(){
                 </Link>);
     }
     return (<div className="dropdownMenu">
-                <div className="menu-item profile">Hello<br/>kodael00</div>
-                <DropdownItem icon={<i class="far fa-calendar-check"></i>} path="/User/Myreservations">&nbsp;My reservations</DropdownItem>
-                <DropdownItem icon={<i class="fas fa-edit"></i>} path="/User/Chooserobot">&nbsp;Make a reservation</DropdownItem>
-                <DropdownItem icon={<i class="fas fa-history"></i>} path="/User/History">&nbsp;History</DropdownItem>
+                <DropdownItem icon={<i className="far fa-calendar-check"></i>} path="/User/Myreservations">&nbsp;My reservations</DropdownItem>
+                <DropdownItem icon={<i className="fas fa-edit"></i>} path="/User/Chooserobot">&nbsp;Make a reservation</DropdownItem>
+                <DropdownItem icon={<i className="fas fa-history"></i>} path="/User/History">&nbsp;History</DropdownItem>
             </div>)
 }
 export default DropdownMenu;

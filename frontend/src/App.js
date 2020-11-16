@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
 import Welcome from "./components/Mainpage";
 import Chooserobot from "./components/Chooserobot";
+import Myreservations from "./components/Myreservations";
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +15,12 @@ export default class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
+      <Route
+            path="/User/Myreservations"
+            render={routerProps => (
+              <Myreservations {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
       <Route
             path="/User/Chooserobot"
             render={routerProps => (

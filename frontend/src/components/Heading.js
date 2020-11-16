@@ -7,23 +7,23 @@ function Header(){
     return (
         <header>
             <Heading>
-              <NavItem item="Login" path="/Login"/>;
-              <NavItem item={<i class='fas fa-home'></i>} path="/"/>
-              <NavItem item={<i class="fas fa-bars"></i>}><DropdownMenu/></NavItem>;
+              <NavItem item={<i className='fas fa-home'></i>} path="/"/>
+              <NavItem item="Login" path="/Login"/>
+              <NavItem item={<i className="fas fa-bars"></i>}><DropdownMenu/></NavItem>
             </Heading>
         </header>
       );
 }
 
 function Heading(props) {
-  return (<nav className="navbar bg-dark navbar-expand-lg navbar-dark">
-            <a className="navbar-brand" href="https://www.oamk.fi/fi/"><img id="oamkLogo" src="https://www.oamk.fi/images/Logot/Suomi-toimisto-tulostettava-png-rgb/Toimistokayttoon_Suomeksi_Valkoinen-11.png" alt="logo"/></a>
+  return (<nav className="navbar bg navbar-expand-lg">
+            <a className="navbar-brand" href="https://www.oamk.fi/fi/"><img id="oamkLogo" src="https://www.oamk.fi/images/Logot/Suomi-toimisto-tulostettava-png-rgb/Toimistokayttoon_Suomeksi_Musta-07.png" alt="logo"/></a>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav ml-auto">
-                {props.children}
-            </ul>
+                <ul className="navbar-nav ml-auto">
+                    {props.children}
+                </ul>
             </div>
-        </nav>);;
+        </nav>);
 }
 
 function NavItem(props){
