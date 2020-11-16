@@ -4,10 +4,13 @@ function Mainbody() {
       <div className="container">
         <div className="robotText">
           <h1 className="title">Robot Reservation<br/>System</h1>
-          <h6>Easy reservation of different kind of university robots and information systems</h6>
+          <h6><span>Automation is the competitive adventage you need. Reserve any kind of university robots and information systems, expand your knowladge, make your daily taskes easier
+          and broaden your horizons.</span></h6>
+          <hr className="new2"/>
+          <h6><span>Learn more how to reserve and use them</span></h6>
           <button id="learnMore">Learn more</button>
         </div>
-        <img src="https://media.giphy.com/media/lS0uNqBIZtOEaIj5Fd/giphy.gif" alt="robotImage" id="robotImg"></img>
+        <img className="robotImg" src="https://media.giphy.com/media/PgKWL5QUrpwO5KqtAX/giphy.gif" alt="robot"/>
       </div>
     );
   }

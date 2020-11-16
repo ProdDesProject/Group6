@@ -12,12 +12,12 @@ const robots=[
     {
         id: 3,
         name: "Cleaing Robot",
-        imgURL: "https://lh3.googleusercontent.com/proxy/zvQuMgRn_vlcrNFLY9lj3yRUKwHEr-Ti3YWHvgoCxs9K7L1KcfQLI5H5pBxgN5mA63ortsjWoMYOncA_iHzpeXyJJVPxetLyJYk7OXgE6hCSIqljuRaxz-iaZ0_BDp1tBFh_xCatUQ"
+        imgURL: "https://lh3.googleusercontent.com/proxy/bF-xXBx88wzLTtNarO4J80CtsKTfuenkIhGgnWYYDDrGoH8-dM0n-p-UD0qq2yMDw3ZVQYYmbZWmecCAtry7b8VgR3--QPn6byb-Q3ntWOAKHBqTxoJq4w0mQr6u"
     },
     {
         id: 4,
         name: "Math Robot",
-        imgURL: "https://lh3.googleusercontent.com/proxy/zvQuMgRn_vlcrNFLY9lj3yRUKwHEr-Ti3YWHvgoCxs9K7L1KcfQLI5H5pBxgN5mA63ortsjWoMYOncA_iHzpeXyJJVPxetLyJYk7OXgE6hCSIqljuRaxz-iaZ0_BDp1tBFh_xCatUQ"
+        imgURL: "https://lh3.googleusercontent.com/proxy/Px8PXQyqVPu0tue50Wy-G0APkqlS8vJSaeXI6wK4nYsQv-WCY70lGyzEVV8IaFABVABYEyyH25R3iaNzPe3RRXLy36XeGEnxPb4RE8k9VIJpYg"
     }
 
 ];

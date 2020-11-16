@@ -5,9 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function RobotCard(props){
     return(
-        <div class="card">
+        <div className="card">
+            <img className="robotimg" src={props.imgURL} alt="robot_img"/>
             <h4>{props.name}</h4>
-            <img class="robotimg" src={props.imgURL} alt="robot_img"/>
         </div>
     );
 }
@@ -16,9 +16,10 @@ function Chooserobot(){
     return(
         <div>
             <Header/>
-            <div class="chooserob">
-                <h1>School robots</h1>
-                <h4>choose and reserve</h4>
+            <div className="chooserob container2">
+                <h1>Choose and reserve</h1>
+                <input type="text" placeholder="Search by type.." className="searchbar" ></input>
+                <button className="searchRobotTbutton"><i className="fas fa-search"></i></button>
                 <br/>
                 <div className="row">
                     {robotsinfo.map(robot =>(
