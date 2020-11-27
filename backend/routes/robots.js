@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var robots = require('../models/robots_model');
+var robots = require('../models/robot_model');
 
 router.get('/:id?', function(req, res, next) {
     if (req.params.id) {

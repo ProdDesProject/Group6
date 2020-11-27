@@ -3,24 +3,23 @@ const knex = require('../knexfile')
 
 Model.knex(knex)
 
-class User extends Model {
+class Robot extends Model {
     static get tableName() {
-        return 'users'
+        return 'robots'
     }
-
     static get relationMappings() {
         const Reservation = require('./reservation_model')
         return {
-            reservations: {
+            reserved: {
                 relation: Model.HasManyRelation,
                 modelClass: Reservation,
                 join: {
-                    from: 'users.id',
-                    to: 'reservations.userId'
+                    from: 'robots.id',
+                    to: 'reservations.robotId'
                 }
             }
         }
     }
 }
 
-module.exports = User;
+module.exports = Robot;
