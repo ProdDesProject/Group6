@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
 import Welcome from "./components/Mainpage";
+import Chooserobot from "./components/Chooserobot";
+import Myreservations from "./components/Myreservations";
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,19 @@ export default class App extends Component {
       <BrowserRouter>
       <Switch>
       <Route
-            path="/"
+            path="/User/Myreservations"
+            render={routerProps => (
+              <Myreservations {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
+      <Route
+            path="/User/Chooserobot"
+            render={routerProps => (
+              <Chooserobot {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
+      <Route
+            path="/Login"
             render={routerProps => (
               <Login {...routerProps} example_state={this.state.example_state}/>
             )}
