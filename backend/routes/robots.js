@@ -2,84 +2,68 @@ var express = require('express');
 var router = express.Router();
 var robots = require('../models/robot_model');
 
-router.get('/:id?', function(req, res, next) {
-    if (req.params.id) {
-      book.getById(req.params.id, function(err, rows) {
-        if (err) {
-          res.json(err);
-        } else {
-          res.json(rows.rows);
-        }
-      });
-    } else {
-      book.get(function(err, rows) {
-        if (err) {
-          res.json(err);
-        } else {
-          res.json(rows.rows);
-        }
-      });
-    }
+// get all robots
+// GET http://localhost:3000/robots/
+router.get('/', function(req, res, next) {
+    robots.query()
+        .then(robots => {
+          res.json(robots)
+        })
   });
 
-router.post('/', function(req, res, next) {
-    robots.add(req.body, function(err, count) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
+// get robots by id
+// GET http://localhost:3000/robots/1
+router.get('/:id', (req, res) => {
+    robots.query()
+        .findById(req.params.id)
+        .then(robots => {
+          res.json(robots)
+        })
+  });
 
-router.delete('/:id', function(req, res, next) {
-    robots.delete(req.body, function(err, count) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
+// get robots by name
+// GET http://localhost:3000/robots/name/2
+router.get('/:name', (req, res) => {
+    robots.query()
+        .findByName(req.params.name)
+        .then(robots => {
+          res.json(robots)
+        })
+  });
 
-router.put('/:id', function(req, res, next) {
-    robots.update(req.body, function(err, count) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
+// delete robots by id
+// GET http://localhost:3000/robots/1
+router.get('/delete/:id', (req, res) => {
+    robots.query()
+        .deleteById(req.params.id)
+        .then(robots => {
+          res.json(robots)
+        })
+  });
 
-router.get('/name/:value?', function(req, res, next) {
-    robots.searchByName(req.body, function(err, count) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
 
-router.get('/type/:value?', function(req, res, next) {
-    robots.searchByType(req.body, function(err, count) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
+// create new robot
+// POST baseurl/robots/add    # give reservation params as json, body->raw->json
+/*
+    POST http://localhost:3000/robotss/add/ HTTP/1.1
+    Content-Type: application/json
 
-router.get('/payload/:value?', function(req, res, next) {
-    robots.searchByPayload(req.body, function(err, cout) {
-        if(err) {
-            res.json(err);
-        } else {
-            res.json(req.body);
-        }
-    });
-});
+    {
+        "name": "robot1",
+        "type": "type1",
+        "payload": 4
+    }
+*/
+router.post('/add', async (req, res) => {
+    const graph = req.body;
+    let insertedGraph = await robots
+        .query()
+        .insertGraph((graph)
+        );
+        res.send(insertedGraph);
+  });
+
+
+
 
 module.exports = router;
