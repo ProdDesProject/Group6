@@ -1,0 +1,24 @@
+.freeBtn {
+    color: lightgreen;
+    background-color: white;
+    margin: 5px;
+}
+
+.busyBtn {
+    color: red;
+    background-color: white;
+    margin: 5px;
+}
+
+.ownedBtn {
+    color: darkblue;
+    background-color: white;
+    margin: 5px;
+
+}
+
+.reservedBtn {
+    color: darkgreen;
+    background-color: white;
+    margin: 5px;
+}

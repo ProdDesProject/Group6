@@ -5,6 +5,7 @@ import Welcome from "./components/Mainpage";
 import Chooserobot from "./components/Chooserobot";
 import Myreservations from "./components/Myreservations";
 import AdminDashboard from "./components/AdminDashboard";
+import Reservation from "./components/Reservation"
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +17,12 @@ export default class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
+      <Route
+            path="/User/Reservation"
+            render={routerProps => (
+              <Reservation {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
       <Route
             path="/Admin/Dashboard"
             render={routerProps => (
