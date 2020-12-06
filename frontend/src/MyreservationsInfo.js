@@ -1,4 +1,4 @@
-const reservations=[
+const reservations = [
     {
         id: 1,
         robots_Name: "Smart Board",
@@ -13,7 +13,7 @@ const reservations=[
     },
     {
         id: 3,
-        robots_Name: "Cleaning Robot",
+        robots_Name: "Math Robot",
         date: "Dec 01 2020",
         time: "10:00-11:00"
     },
