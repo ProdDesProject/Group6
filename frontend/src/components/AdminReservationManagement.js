@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import LoadingScreen from "./LoadingScreen";
+
 const Calendar = (props) => {
     return (
         <DatePicker
@@ -25,7 +27,7 @@ function renderTableHeader() {
 
 function renderTableData(props) {
     let data = props.data;
-    let filtered = data.filter(i=>{
+    let filtered = data.filter(i => {
         return i.username.toLowerCase().includes(props.username.toLowerCase())
             && i.robots_Name.toLowerCase().includes(props.robotname.toLowerCase())
             && i.date.includes(props.dateFilter)
@@ -38,8 +40,11 @@ function renderTableData(props) {
                 <td>{reservation.robots_Name}</td>
                 <td>{reservation.date}</td>
                 <td>{reservation.time}</td>
-                <td><button id="editRes"><i className="fas fa-pencil-alt" style={{ color: "white" }}></i></button>&nbsp;
-             <button id="deleteRes"><i className="far fa-trash-alt" style={{ color: "white" }}></i></button></td>
+                <td>
+                    <button id="deleteRes" onClick={() => props.confirmation(reservation)}>
+                        <i className="far fa-trash-alt" style={{ color: "white" }}></i>
+                    </button>
+                </td>
             </tr>
         )
     })
@@ -52,29 +57,43 @@ export default class AdminReservationManagement extends Component {
             data: stubData,
             usernameFilter: "",
             robotnameFilter: "",
-            dateFilter: ""
+            dateFilter: "",
+            loading: false
         }
         this.inputChange = this.inputChange.bind(this)
         this.selectDate = this.selectDate.bind(this)
-        this.clearDateFilter =  this.clearDateFilter.bind(this)
+        this.clearDateFilter = this.clearDateFilter.bind(this)
+        this.confirmation = this.confirmation.bind(this)
     }
     inputChange = (e) => {
         //console.log(e.target.name+":"+e.target.value)
         this.setState({ [e.target.name]: e.target.value })
     }
     selectDate(e) {
-        console.log(e.toISOString().substr(0,10))
+        //console.log(e.toISOString().substr(0,10))
         this.setState({ dateFilter: e })
     }
     clearDateFilter = (e) => {
-        this.setState({dateFilter: ""})
+        this.setState({ dateFilter: "" })
+    }
+    confirmation = (reservation) => {
+        let r = window.confirm(`Delete reservation made by ${reservation.username} at ${reservation.time} ${reservation.date}?`);
+        if (r === true) {
+            this.setState({ loading: true })
+            setTimeout(() => {
+                this.setState({ loading: false })
+            }, 500)
+        } else {
+            console.log(r)
+        }
     }
     render() {
         return (
             <>
                 {/* <div className="container2"> */}
+                {this.state.loading ? <LoadingScreen /> : null}
                 <div className="container">
-                    <h1 id='title'>My reservations</h1>
+                    <h1 id='title'>Reservation management</h1>
                     <div className="m-5">
                         <b className="p-2">Filter</b>
                         <table>
@@ -89,9 +108,9 @@ export default class AdminReservationManagement extends Component {
                             <tr >
                                 <td className="p-2 ">Date:</td>
                                 <td>
-                                    <Calendar date={this.state.dateFilter} selectDate={this.selectDate}/>
+                                    <Calendar date={this.state.dateFilter} selectDate={this.selectDate} />
                                     <button onClick={this.clearDateFilter}>x</button>
-                                    </td>
+                                </td>
                             </tr>
                         </table>
 
@@ -105,7 +124,8 @@ export default class AdminReservationManagement extends Component {
                                 data: this.state.data,
                                 username: this.state.usernameFilter,
                                 robotname: this.state.robotnameFilter,
-                                dateFilter: this.state.dateFilter
+                                dateFilter: this.state.dateFilter,
+                                confirmation: this.confirmation
                             })}
                         </tbody>
                     </table>

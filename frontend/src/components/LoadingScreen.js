@@ -1,9 +1,10 @@
 import React from 'react'
 import Spinning from '../CSS/831.svg'
+import styles from "../CSS/LoadingScreen.module.css"
 
 export default function LoadingScreen() {
     return (
-        <div>
+        <div className={styles.blurBG}>
             <img src={Spinning} alt="logo" style={{
                 position: "fixed",
                 top: "48%",
