@@ -9,7 +9,7 @@ const Calendar = (props) => {
         <DatePicker
             selected={props.date}
             onSelect={props.selectDate}
-            dateFormat="yyyy-MM-dd"
+            dateFormat="dd/MM/yyyy"
         />
     );
 };
@@ -27,11 +27,23 @@ function renderTableHeader() {
 
 function renderTableData(props) {
     let data = props.data;
-    let filtered = data.filter(i => {
-        return i.username.toLowerCase().includes(props.username.toLowerCase())
-            && i.robots_Name.toLowerCase().includes(props.robotname.toLowerCase())
-            && i.date.includes(props.dateFilter)
-    })
+    let dateFilter = props.dateFilter;
+    let filtered;
+    if (dateFilter instanceof Date) {
+        let date = new Date( dateFilter.getTime() + Math.abs(dateFilter.getTimezoneOffset()*60000) )
+        filtered = data.filter(i => {
+            return i.username.toLowerCase().includes(props.username.toLowerCase())
+                && i.robots_Name.toLowerCase().includes(props.robotname.toLowerCase())
+                && i.date.includes(date.toISOString().substr(0, 10))
+        })
+    }
+    else {
+        filtered = data.filter(i => {
+            return i.username.toLowerCase().includes(props.username.toLowerCase())
+                && i.robots_Name.toLowerCase().includes(props.robotname.toLowerCase())
+            //&& i.date.includes(props.dateFilter.toISOString().substr(0,10))
+        })
+    }
     return filtered.map((reservation) => {
         return (
             <tr key={reservation.id}>
@@ -70,7 +82,7 @@ export default class AdminReservationManagement extends Component {
         this.setState({ [e.target.name]: e.target.value })
     }
     selectDate(e) {
-        //console.log(e.toISOString().substr(0,10))
+        //console.log(e.toISOString())
         this.setState({ dateFilter: e })
     }
     clearDateFilter = (e) => {
@@ -84,7 +96,7 @@ export default class AdminReservationManagement extends Component {
                 this.setState({ loading: false })
             }, 500)
         } else {
-            console.log(r)
+            
         }
     }
     render() {
@@ -97,22 +109,25 @@ export default class AdminReservationManagement extends Component {
                     <div className="m-5">
                         <b className="p-2">Filter</b>
                         <table>
-                            <tr >
-                                <td className="p-2 ">username:</td>
-                                <td><input onChange={this.inputChange} name="usernameFilter" /></td>
-                            </tr>
-                            <tr >
-                                <td className="p-2 ">Robot's name:</td>
-                                <td><input onChange={this.inputChange} name="robotnameFilter" /></td>
-                            </tr>
-                            <tr >
-                                <td className="p-2 ">Date:</td>
-                                <td>
-                                    <Calendar date={this.state.dateFilter} selectDate={this.selectDate} />
-                                    <button onClick={this.clearDateFilter}>x</button>
-                                </td>
-                            </tr>
+                            <tbody>
+                                <tr >
+                                    <td className="p-2 ">username:</td>
+                                    <td><input onChange={this.inputChange} name="usernameFilter" /></td>
+                                </tr>
+                                <tr >
+                                    <td className="p-2 ">Robot's name:</td>
+                                    <td><input onChange={this.inputChange} name="robotnameFilter" /></td>
+                                </tr>
+                                <tr >
+                                    <td className="p-2 ">Date:</td>
+                                    <td>
+                                        <Calendar date={this.state.dateFilter} selectDate={this.selectDate} />
+                                        <button onClick={this.clearDateFilter}>x</button>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
+
 
                     </div>
 
