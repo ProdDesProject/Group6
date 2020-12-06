@@ -1,5 +1,20 @@
 import React, { Component, useState } from 'react'
+import DatePicker from "react-datepicker";
+import LoadingScreen from "./LoadingScreen";
+import "react-datepicker/dist/react-datepicker.css";
 import styles from "../CSS/Reservation.module.css";
+
+const Calendar = (props) => {
+    //const [startDate, setStartDate] = useState(new Date());
+    return (
+        <DatePicker
+            selected={props.date}
+            onSelect={props.selectDate}
+            dateFormat="dd-MM-yyyy"
+            minDate={new Date()}
+        />
+    );
+};
 
 const RenderButton = (props) => {
     let index = [];
@@ -8,13 +23,13 @@ const RenderButton = (props) => {
     }
     let result = index.map(i => {
         if (props.busy.includes(i))
-            return <button className={`col ${styles.busyBtn}`} key={i}>
+            return <button className={`col ${styles.busyBtn}`} key={i} disabled>
                 {`${i}:00-${i + 1}:00`}
                 <div className="row"><div className="col"></div></div>
                 <div className="row"><div className={`col ${styles.busyTxt}`}>Busy</div></div>
             </button>
         else if (props.owned.includes(i))
-            return <button className={`col ${styles.ownedBtn}`} key={i}>
+            return <button className={`col ${styles.ownedBtn}`} key={i} disabled>
                 {`${i}:00-${i + 1}:00`}
                 <div className="row"><div className="col"></div></div>
                 <div className="row"><div className={`col ${styles.ownedTxt}`}>Owned</div></div>
@@ -38,27 +53,37 @@ const RenderButton = (props) => {
     return <div className="row">{result}</div>
 }
 
+const stubData = {
+    user: { idUser: 12 },
+    robot: {
+        idRobot: 1,
+        robotName: "robot 1"
+    },
+    busy: ["03-12-2020 1", "03-12-2020 2", "03-12-2020 3"],
+    owned: ["03-12-2020 8", "03-12-2020 9", "03-12-2020 10"]
+}
 export default class Reservation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: new Date().toISOString().substr(0, 10),
+            date: new Date(),
             busy: [1, 8, 23],
             owned: [5, 6],
             reserve: [],
-            selectedTime: []
+            loading: false
         }
-        this.selectTime = this.selectTime.bind(this);
         this.selectDate = this.selectDate.bind(this);
         this.handleTimeSelect = this.handleTimeSelect.bind(this)
     }
-    selectTime(data) {
-        this.setState({ selectTime: data })
-        console.log(data)
+    componentDidMount() {
+        let busy = stubData.busy.map(x => parseInt(x.slice(10)))
+        let owned = stubData.owned.map(x => parseInt(x.slice(11)))
+        this.setState({ busy: busy, owned: owned })
     }
     selectDate(e) {
-        console.log(e.target.value)
-        this.setState({ date: e.target.value })
+        
+        
+        this.setState({ date: e })
     }
     handleTimeSelect(i) {
         if (this.state.reserve.includes(i)) {
@@ -70,35 +95,38 @@ export default class Reservation extends Component {
             this.setState({ reserve: [...this.state.reserve, i] })
     }
     handleSubmit() {
-        console.log(this.state.reserve)
+        //console.log(this.state.busy)
     }
     render() {
         let pass = (({ busy, owned, reserve }) => ({ busy, owned, reserve }))(this.state);
         return (
-            <div className="container">
+            <>
+                {this.state.loading === true ? <LoadingScreen /> : (
+                    <div className="container mt-5">
 
-                <div className="row">
-                    <div className="p-3 bg-white">Date:</div>
-                    <input type="date" className=""
-                        min={new Date().toISOString().substr(0, 10)}
-                        defaultValue={this.state.date}
-                        onChange={e => this.selectDate(e)}
-                    />
-                </div>
-                <RenderButton min={0} max={6} {...pass} handleTimeSelect={this.handleTimeSelect} />
-                <RenderButton min={6} max={12} {...pass} handleTimeSelect={this.handleTimeSelect} />
-                <RenderButton min={12} max={18} {...pass} handleTimeSelect={this.handleTimeSelect} />
-                <RenderButton min={18} max={24} {...pass} handleTimeSelect={this.handleTimeSelect} />
-                <div className="row">Selected time</div>
-                <ul>
-                {[...this.state.reserve].sort((a,b)=>a-b).map((x)=>{
-                    return <li className="row">{`${x}:00-${x + 1}:00`}</li>
-                })}
-                </ul>
-                <div className="row">
-                    <button className="btn bg-white" onClick={() => this.handleSubmit()}>Reserve</button>
-                </div>
-            </div>
+                        <div className="row">
+                            <div className="px-3 bg-white">Date:</div>
+                            <Calendar selectDate={this.selectDate} date={this.state.date} />
+                        </div>
+                        <div className="my-4">
+                            <RenderButton min={0} max={6} {...pass} handleTimeSelect={this.handleTimeSelect} />
+                            <RenderButton min={6} max={12} {...pass} handleTimeSelect={this.handleTimeSelect} />
+                            <RenderButton min={12} max={18} {...pass} handleTimeSelect={this.handleTimeSelect} />
+                            <RenderButton min={18} max={24} {...pass} handleTimeSelect={this.handleTimeSelect} />
+                        </div>
+
+                        <div className="row">Selected time</div>
+                        <ul>
+                            {[...this.state.reserve].sort((a, b) => a - b).map((x) => {
+                                return <li className="row" key={x}>{`${x}:00-${x + 1}:00`}</li>
+                            })}
+                        </ul>
+                        <div className="row">
+                            <button className="btn bg-white" onClick={() => this.handleSubmit()}>Reserve</button>
+                        </div>
+                    </div>)}
+
+            </>
         )
     }
 }
