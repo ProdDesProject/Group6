@@ -1,0 +1,31 @@
+.freeBtn {
+    background-color: white;
+    margin: 5px;
+}
+
+.busyBtn {
+    background-color: #ff8787;
+    margin: 5px;
+}
+
+.busyTxt {
+    color: #cc0000;
+}
+
+.ownedBtn {
+    background-color: #68c1fc;
+    margin: 5px;
+}
+
+.ownedTxt {
+    color: #2300bd;
+}
+
+.reservedBtn {
+    background-color: #85ff87;
+    margin: 5px;
+}
+
+.reservedTxt {
+    color: #133600;
+}
