@@ -1,11 +1,11 @@
 import Mainbody from './Mainbody';
-import  Header from './Heading';
+import Header from './Heading';
 
 function Mainpage() {
   return (
     <div>
-      <Header/>
-      <Mainbody/>
+      <Header />
+      <Mainbody />
     </div>
   );
 }

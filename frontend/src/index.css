@@ -18,7 +18,7 @@ li{
   margin-right: auto;
   padding: 5%;
   border-radius: 1%;
-  height: 100vh;
+  height: 100%;
   text-align: center;
 }
 
@@ -47,13 +47,14 @@ li{
   padding: 0.5%;
   width: 25%;
   border: none;
-  margin-top: 3%;
-  margin-bottom: 3%;
+  margin-left: auto;
+  margin-right: auto;
   font-size: 17px;
   position: relative;
+  color: #290429;
 }
 
-.container{
+.background-container{
   background: url("http://35.237.249.63/forbes-insights/wp-content/uploads/2018/05/dell-background.jpg");
   background-position: -350px -600px;
   margin-top: 1%;
@@ -104,11 +105,10 @@ hr.new2 {
   width: 55%;
   margin: 3% 5% 2% 5%;
   float: right;
-
 }
 
 #learnMore {
-  background: #26e0e0;
+  background: #2639e0;
   background-image: -webkit-linear-gradient(top, #c2dee9, #53d7ff);
   background-image: -moz-linear-gradient(top, #c2dee9, #53d7ff);
   background-image: -ms-linear-gradient(top, #c2dee9, #53d7ff);
@@ -184,7 +184,7 @@ hr.new2 {
   text-align: center;
   color: white;
 }
-.card{
+.customCard{
   margin: 30px 40px 30px 40px;
   color: #06308b;
   cursor: pointer;
@@ -197,7 +197,7 @@ hr.new2 {
   font-family: arial, sans-serif;
   color: white;
   font-weight: bold;
-  margin-bottom: 5%;
+  margin-bottom: 2%;
 }
 
 #reservations {
@@ -215,15 +215,15 @@ hr.new2 {
   padding: 8px;
 }
 
-#reservations tr:nth-child(odd){background-color: #f2f2f2;}
-
-#reservations tr:nth-child(even){background-color: #bdb8b8;}
-
-header{
+.customHeader{
   width: 95%;
   margin-left: auto;
   margin-right: auto;
 }
+
+#reservations tr:nth-child(odd){background-color: #f2f2f2;}
+
+#reservations tr:nth-child(even){background-color: #bdb8b8;}
 
 #rHeader{
   padding-top: 12px;
@@ -234,12 +234,133 @@ header{
   text-transform: uppercase;
   font-weight: bold;
 }
+/*admin actions buttons*/
 
-#editRes{
+.editRes{
   background-color: rgb(41, 136, 41);
   border: none;
+  border-radius: 60px;
+  padding: 0.1em 0.4em;
 }
-#deleteRes{
+.avaliableRes{
+  background-color: rgb(41, 136, 41);
+  border: none;
+  border-radius: 60px;
+  padding: 0.1em 0.4em;
+  pointer-events: none;
+}
+.editRes:hover{
+  background-color: rgb(66, 167, 66);
+}
+
+.deleteRes{
   background-color: rgb(143, 26, 26);
   border: none;
+  border-radius: 60px;
+  padding: 0.1em 0.45em;
 }
+.deleteRes:hover{
+  background-color: rgb(158, 48, 48);
+}
+
+.infoRes{
+  background-color: royalblue;
+  border: none;
+  border-radius: 60px;
+  padding: 0.1em 0.4em;
+}
+
+.infoRes:hover{
+  background-color: rgb(114, 137, 206);
+}
+
+.deleteRes:active, .editRes:active, .infoRes:active{
+  border: none;
+  outline:none;
+}
+
+/*add new robot*/
+
+.addRobotForm{
+  text-align: start;
+  display: inline-block;
+  width: 40%;
+}
+.addRobot{
+  position: fixed;
+  width: 50%;
+  z-index: 9;
+  background-color: #367091;
+  opacity: 0.97;
+  font-size: 15px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 3%;
+  padding-bottom: 3%;
+}
+
+.blueBtn {
+  background-color: #288bcc;
+  border: none;
+  color: #ffffff;
+  font-size: 17px;
+  padding: 5px 20px 5px 20px;
+  text-decoration: none;
+  margin-top: 3%;
+}
+
+.blueBtn:hover {
+  background: #3cb0fd;
+  background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+  background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+  text-decoration: none;
+}
+
+.row{
+  margin-top: 3%;
+}
+.addRobot label, .addRobot input, .addRobot textarea {
+  display: block;
+  width: 100%;
+}
+
+/*calcel add robot*/
+.calcelAdd {
+  color: #290429;
+  font-size: 17px;
+  text-decoration: none;
+  border: none;
+  margin-top: 5%;
+  padding: 5px 20px 5px 20px;
+  background-color: rgb(184, 184, 182);
+}
+
+.calcelAdd:hover {
+  text-decoration: none;
+  background-color: rgb(211, 211, 211);
+}
+
+/*robot info*/
+.infoRobotCard{
+  left: 50%;
+  top: 50%;
+  width: 34%;
+  z-index: 9;
+  transform: translate(-50%, -50%);
+  position: fixed;
+}
+.infoBac{
+  left: 0%;
+  right: 0%;
+  width: 100%;
+  background-color: rgba(9, 14, 17, 0.3);
+}
+.infoRobImg{
+  height: 200px;
+}
+
+
