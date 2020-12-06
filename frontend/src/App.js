@@ -5,7 +5,8 @@ import Welcome from "./components/Mainpage";
 import Chooserobot from "./components/Chooserobot";
 import Myreservations from "./components/Myreservations";
 import AdminDashboard from "./components/AdminDashboard";
-import Reservation from "./components/Reservation"
+import Reservation from "./components/TimeBooking"
+import AdminReservationManagement from "./components/AdminReservationManagement"
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +18,7 @@ export default class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
+      <Route path="/Admin/ReservationManagement"><AdminReservationManagement/></Route>
       <Route
             path="/User/Reservation"
             render={routerProps => (
