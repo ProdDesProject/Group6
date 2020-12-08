@@ -4,6 +4,9 @@ import Login from "./components/Login";
 import Welcome from "./components/Mainpage";
 import Chooserobot from "./components/Chooserobot";
 import Myreservations from "./components/Myreservations";
+import AdminDashboard from "./components/AdminDashboard";
+import Reservation from "./components/TimeBooking"
+import AdminReservationManagement from "./components/AdminReservationManagement"
 import RManagment from "./components/RobotManagment";
 import UserManagement from "./components/UserManagement";
 
@@ -17,14 +20,27 @@ export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Switch>
+      <Switch>
           <Route
             path="/User/UserManagement"
             render={routerProps => (
               <UserManagement {...routerProps} example_state={this.state.example_state} />
             )}
           />
-          <Route
+      <Route path="/Admin/ReservationManagement"><AdminReservationManagement/></Route>
+      <Route
+            path="/User/Reservation"
+            render={routerProps => (
+              <Reservation {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
+      <Route
+            path="/Admin/Dashboard"
+            render={routerProps => (
+              <AdminDashboard {...routerProps} example_state={this.state.example_state}/>
+            )}
+          />
+      <Route
             path="/User/Myreservations"
             render={routerProps => (
               <Myreservations {...routerProps} example_state={this.state.example_state} />
