@@ -16,7 +16,7 @@ function Header() {
 }
 
 function Heading(props) {
-    return (<nav className="navbar bg navbar-expand-lg">
+    return (<nav className="navbar bg navbar-expand-md navbar-expand-sm">
         <a className="navbar-brand" href="https://www.oamk.fi/fi/"><img id="oamkLogo" src="https://www.oamk.fi/images/Logot/Suomi-toimisto-tulostettava-png-rgb/Toimistokayttoon_Suomeksi_Musta-07.png" alt="logo" /></a>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
@@ -31,8 +31,8 @@ function NavItem(props) {
     const [openmenu, setOpenmenu] = useState(false);
 
     //change it to props.items
-    return (<li className="nav-item">
-        <Link to={props.path} className="nav-link" onClick={() => setOpenmenu(!openmenu)}>
+    return (<li className="nav-item menuLinks">
+        <Link to={props.path} className="nav-link navl" onClick={() => setOpenmenu(!openmenu)}>
             {props.item}
         </Link>
         {openmenu && props.children}

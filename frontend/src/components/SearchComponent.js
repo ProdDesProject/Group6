@@ -128,7 +128,7 @@ class SearchComponent extends Component {
 
   searchByType = (e) => {
     return (
-      <div className="row">
+      <div className="row searchrow">
         {robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
           <div className="col-md-4" key={filteredRobot.id}>
             <RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} />
@@ -143,7 +143,7 @@ class SearchComponent extends Component {
 
   showAll = () => {
     return (
-      <div className="row">
+      <div className="row searchrow">
         {robotsinfo.map(robot => (
           <div className="col-md-4" key={robot.id}>
             <RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} />

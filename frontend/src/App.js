@@ -8,6 +8,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import Reservation from "./components/TimeBooking"
 import AdminReservationManagement from "./components/AdminReservationManagement"
 import RManagment from "./components/RobotManagment";
+import UserManagement from "./components/UserManagement";
 
 export default class App extends Component {
   constructor(props) {
@@ -20,6 +21,12 @@ export default class App extends Component {
     return (
       <BrowserRouter>
       <Switch>
+          <Route
+            path="/User/UserManagement"
+            render={routerProps => (
+              <UserManagement {...routerProps} example_state={this.state.example_state} />
+            )}
+          />
       <Route path="/Admin/ReservationManagement"><AdminReservationManagement/></Route>
       <Route
             path="/User/Reservation"
