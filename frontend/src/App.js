@@ -5,6 +5,7 @@ import Welcome from "./components/Mainpage";
 import Chooserobot from "./components/Chooserobot";
 import Myreservations from "./components/Myreservations";
 import RManagment from "./components/RobotManagment";
+import UserManagement from "./components/UserManagement";
 
 export default class App extends Component {
   constructor(props) {
@@ -17,6 +18,12 @@ export default class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
+          <Route
+            path="/User/UserManagement"
+            render={routerProps => (
+              <UserManagement {...routerProps} example_state={this.state.example_state} />
+            )}
+          />
           <Route
             path="/User/Myreservations"
             render={routerProps => (

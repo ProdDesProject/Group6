@@ -12,6 +12,7 @@ function DropdownMenu() {
         <DropdownItem icon={<i className="far fa-calendar-check"></i>} path="/User/Myreservations">&nbsp;My reservations</DropdownItem>
         <DropdownItem icon={<i className="fas fa-edit"></i>} path="/User/Chooserobot">&nbsp;Make a reservation</DropdownItem>
         <DropdownItem icon={<i className="fas fa-history"></i>} path="/User/History">&nbsp;Robot Management</DropdownItem>
+        <DropdownItem icon={<i className="fas fa-history"></i>} path="/User/UserManagement">&nbsp;User Management</DropdownItem>
     </div>)
 }
 export default DropdownMenu;

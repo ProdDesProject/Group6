@@ -2,7 +2,7 @@
   height: 50px;
   width: 90px;
 }
-li{
+.menuLinks{
   padding: 3px;
   font-weight: bold;
   font-size: 18px;
@@ -22,14 +22,14 @@ li{
   text-align: center;
 }
 
-.nav-link{
+.navl{
   color: rgb(41, 36, 65);
 }
-.nav-link:hover{
+.navl:hover{
   color: rgb(18, 97, 126);
 }
 
-.nav-link:active{
+.navl:active{
   color: rgb(44, 41, 241);
 }
 
@@ -67,7 +67,7 @@ li{
   padding: 6%;
 }
 
-h6 span{
+.titleDescription{
   color: rgb(255, 254, 254);
 }
 
@@ -286,6 +286,10 @@ hr.new2 {
   display: inline-block;
   width: 40%;
 }
+.addRobotForm p{
+  margin:0;
+}
+
 .addRobot{
   position: fixed;
   width: 50%;
@@ -320,10 +324,10 @@ hr.new2 {
   text-decoration: none;
 }
 
-.row{
+.searchrow{
   margin-top: 3%;
 }
-.addRobot label, .addRobot input, .addRobot textarea {
+.addRobot label, .addRobot input, .addRobot textarea, .addRobot select {
   display: block;
   width: 100%;
 }

@@ -24,7 +24,7 @@ const Table = () => {
       })
       MyreservationsInfo.splice(deleteRobot, 1);
       setDeletedId(id);
-      console.log(`Robot with id ${deleledId} successfull deleted`)
+      console.log(`Robot with id ${deleledId} has been successfully deleted`)
    }
 
    function renderTableData() {
@@ -36,7 +36,7 @@ const Table = () => {
                <td>{reservation.date}</td>
                <td>{reservation.time}</td>
                <td><button className="deleteRes" onClick={() => {
-                  var message = `Are you sure to delete this reservation?\n\nRobot's name: ${reservation.robots_Name} \nDate: ${reservation.date}\nTime: ${reservation.time}`
+                  var message = `Are you sure you want to delete this reservation?\n\nRobot's name: ${reservation.robots_Name} \nDate: ${reservation.date}\nTime: ${reservation.time}`
                   if (window.confirm(message))
                      deleteReservation(reservation.id)
                }}>
