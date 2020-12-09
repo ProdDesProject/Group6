@@ -3,7 +3,8 @@ exports.up = function(knex) {
         table.increments('id');
         table.string('name', 20);
         table.string('type', 5);
-        table.integer('payload');
+        table.string('url', 20);
+        table.string('description', 30)
       });  
 };
 
