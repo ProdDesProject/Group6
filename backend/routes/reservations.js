@@ -64,4 +64,29 @@ router.post('/add', async (req, res) => {
         res.send(insertedGraph);
   });
 
+// update reservation 
+// PUT http://localhost:3000/reservations/update/3
+router.put('/update/:id', (req, res) => {
+    const upd = req.body;
+    Reservation.query()
+        .patch(upd)
+        .where('id', req.params.id)
+        .then(reservations => {
+            res.json(reservations)
+            console.dir('updated reservation id "' + req.params.id + '" with ' + JSON.stringify(upd))
+        })
+});
+
+// delete reservation
+// DELETE http://localhost:3000/reservations/delete/3
+router.delete('/delete/:id', (req,res) => {
+    Reservation.query()
+        .delete()
+        .where('id', req.params.id)
+        .then(reservations => {
+            res.json(reservations)
+            console.dir('deleted reservation id "' + req.params.id + '"')
+        })
+});  
+
 module.exports = router;
