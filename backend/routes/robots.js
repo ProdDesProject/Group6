@@ -51,16 +51,6 @@ router.get('/:payload', (req, res) => {
     })
 });
 
-// delete robots by id
-// GET http://localhost:3000/robots/1
-router.get('/delete/:id', (req, res) => {
-    robots.query()
-        .deleteById(req.params.id)
-        .then(robots => {
-          res.json(robots)
-        })
-  });
-
 
 // create new robot
 // POST baseurl/robots/add    # give reservation params as json, body->raw->json
@@ -83,6 +73,29 @@ router.post('/add', async (req, res) => {
         res.send(insertedGraph);
   });
 
+// update robots
+// PUT http://localhost:3000/robots/update/3
+router.put('/update/:id', (req, res) => {
+  const upd = req.body;
+  robots.query()
+    .patch(upd)
+    .where('id', req.params.id)
+    .then(robots => {
+      res.json(robots)
+    })
+});
+
+
+// delete robots by id
+// GET http://localhost:3000/robots/3
+router.get('/delete/:id', (req, res) => {
+    robots.query()
+        .delete()
+        .where('id', req.params.id)
+        .then(robots => {
+          res.json(robots)
+        })
+  });
 
 
 
