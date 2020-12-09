@@ -23,9 +23,9 @@ router.get('/:id', (req, res) => {
 
 // get robots by name
 // GET http://localhost:3000/robots/name/2
-router.get('/:name', (req, res) => {
+router.get('/name/:name', (req, res) => {
     robots.query()
-        .findByName(req.params.name)
+        .where('name', req.params.name)
         .then(robots => {
           res.json(robots)
         })
@@ -33,9 +33,9 @@ router.get('/:name', (req, res) => {
 
 // get robots by type
 // GET http://localhost:3000/robots/type/2
-router.get('/:type', (req, res) => {
+router.get('/type/:type', (req, res) => {
   robots.query()
-    .findByType(req.params.type)
+    .where('type', req.params.type)
     .then(robots => {
       res.json(robots)
     })
@@ -43,9 +43,9 @@ router.get('/:type', (req, res) => {
 
 // get robots by payload
 // GET http://localhost:3000/robots/payload/2
-router.get('/:payload', (req, res) => {
+router.get('/payload/:payload', (req, res) => {
   robots.query()
-    .findByPayload(req.params.payload)
+    .where('payload', req.params.payload)
     .then(robots => {
       res.json(robots)
     })
