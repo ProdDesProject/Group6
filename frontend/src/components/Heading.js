@@ -9,6 +9,7 @@ function Header() {
             <Heading>
                 <NavItem item={<i className='fas fa-home'></i>} path="/" />
                 <NavItem item="Login" path="/Login" />
+                <NavItem item="Dashboard" path="/admin/dashboard" />
                 <NavItem item={<i className="fas fa-bars"></i>}><DropdownMenu /></NavItem>
             </Heading>
         </header>

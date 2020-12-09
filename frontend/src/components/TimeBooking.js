@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import LoadingScreen from "./LoadingScreen";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "../CSS/Reservation.module.css";
+import Header from './Heading';
 
 const Calendar = (props) => {
     //const [startDate, setStartDate] = useState(new Date());
@@ -81,8 +82,6 @@ export default class Reservation extends Component {
         this.setState({ busy: busy, owned: owned })
     }
     selectDate(e) {
-        
-        
         this.setState({ date: e })
     }
     handleTimeSelect(i) {
@@ -101,28 +100,29 @@ export default class Reservation extends Component {
         let pass = (({ busy, owned, reserve }) => ({ busy, owned, reserve }))(this.state);
         return (
             <>
+                <Header />
                 {this.state.loading === true ? <LoadingScreen /> : (
-                    <div className="container mt-5">
+                    <div className="container mt-5 container2">
 
-                        <div className="row">
-                            <div className="px-3 bg-white">Date:</div>
+                        <div className="row chooseTimeTable">
+                            <div className="px-3">Date:</div>
                             <Calendar selectDate={this.selectDate} date={this.state.date} />
                         </div>
-                        <div className="my-4">
+                        <div className="my-4 chooseTimeTable">
                             <RenderButton min={0} max={6} {...pass} handleTimeSelect={this.handleTimeSelect} />
                             <RenderButton min={6} max={12} {...pass} handleTimeSelect={this.handleTimeSelect} />
                             <RenderButton min={12} max={18} {...pass} handleTimeSelect={this.handleTimeSelect} />
                             <RenderButton min={18} max={24} {...pass} handleTimeSelect={this.handleTimeSelect} />
                         </div>
 
-                        <div className="row">Selected time</div>
-                        <ul>
+                        <div className="row chooseTimeTable">Selected time</div>
+                        <ul className="chooseTimeTable">
                             {[...this.state.reserve].sort((a, b) => a - b).map((x) => {
                                 return <li className="row" key={x}>{`${x}:00-${x + 1}:00`}</li>
                             })}
                         </ul>
-                        <div className="row">
-                            <button className="btn bg-white" onClick={() => this.handleSubmit()}>Reserve</button>
+                        <div className="row chooseTimeTable">
+                            <button className="btn bg-white blueBtn" onClick={() => this.handleSubmit()}>Reserve</button>
                         </div>
                     </div>)}
 
