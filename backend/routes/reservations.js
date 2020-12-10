@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 // get reservation by id
-// GET baseurl/reservations
+// GET baseurl/reservations/{id}
 router.get('/:id', (req, res) => {
     Reservation.query()
         .findById(req.params.id)
@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
   });
 
 // get reservation by userId
-// GET baseurl/reservations/id/{userId} 
+// GET baseurl/reservations/userId/{id} 
 router.get('/userId/:userId', async (req, res) => {
     var user = await User.where('id', req.params.userId).fetch({
         withRelated: ["reservations"]
@@ -35,7 +35,7 @@ router.get('/userId/:userId', async (req, res) => {
   });
 
 // get reservation by robotId
-// GET baseurl/reservations/id/{userId} 
+// GET baseurl/reservations/robotId/{id} 
 router.get('/robotId/:robotId', async (req, res) => {
     var robot = await Robot.where('id', req.params.robotId).fetch({
         withRelated: ["robres"]
@@ -57,7 +57,7 @@ router.post('/add', async (req, res) => {
   });
 
 // update reservation 
-// PUT baseurl/reservation/update
+// PUT baseurl/reservation/update/{id}
 router.put('/update/:id', async (req, res) => {
     var reservation = await Reservation.where('id', req.params.id)
     .save({ ...req.body },
@@ -67,7 +67,7 @@ router.put('/update/:id', async (req, res) => {
 });
 
 // delete reservation by user_id
-// DELETE baseurl/reservations/delete/{user_id}
+// DELETE baseurl/reservations/delete/{id}
 router.delete('/delete/:id', async (req,res) => {
     var reservation = await Reservation.where('id', req.params.id)
         .destroy();
