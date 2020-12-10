@@ -1,5 +1,4 @@
 import MyreservationsInfo from "../MyreservationsInfo"
-import Header from './Heading';
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
 
@@ -49,7 +48,6 @@ const Table = () => {
    }
    return (
       <div>
-         <Header />
          <div className="container2" style={{ height: "100vh" }}>
             <h1 id='title'>My reservations</h1>
             <Link to="/User/Chooserobot"><button className="blueBtn" style={{ marginBottom: "5%" }}>Make a new reservation</button></Link>

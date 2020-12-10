@@ -1,5 +1,4 @@
 import React from "react";
-import Header from './Heading';
 import SearchComponent from "./SearchComponent"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function Chooserobot() {
     return (
         <div>
-            <Header />
             <div className="chooserob container2">
                 <h1>Choose and reserve</h1>
                 <SearchComponent admin={false} />

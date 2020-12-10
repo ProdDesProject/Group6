@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Header from './Heading';
 
 export default class Login extends Component {
     constructor(props) {
@@ -21,7 +20,6 @@ export default class Login extends Component {
     render() {
         return (
             <div>
-                <Header />
                 <div className="container background-container mt-5">
                     <div className="border border-dark rounded p-5">
                         <form onSubmit={this.handleSubmit}>

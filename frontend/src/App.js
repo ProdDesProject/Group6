@@ -9,6 +9,8 @@ import Reservation from "./components/TimeBooking"
 import AdminReservationManagement from "./components/AdminReservationManagement"
 import RManagment from "./components/RobotManagment";
 import UserManagement from "./components/UserManagement";
+import Header from './components/Heading';
+
 
 export default class App extends Component {
   constructor(props) {
@@ -20,6 +22,7 @@ export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
+        <Header/>
         <Switch>
           <Route
             path="/admin/robot-management"

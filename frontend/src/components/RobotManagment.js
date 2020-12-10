@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Header from './Heading';
 import AddRobot from "./AddRobot";
 import SearchComponent from "./SearchComponent";
 
@@ -24,7 +23,6 @@ class RobotManagmentComponent extends Component {
     render() {
         return (
             <div>
-                <Header />
                 <div className="chooserob container2">
                     <h1>Robot Management</h1>
                     <button className="blueBtn" onClick={() => this.setState({ showAdd: true })}>Add new robot</button>

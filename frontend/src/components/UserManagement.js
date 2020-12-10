@@ -1,5 +1,4 @@
 import users from "../users"
-import Header from './Heading';
 import React, { Component } from "react";
 import AddUser from "./AddUser";
 
@@ -81,7 +80,6 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
-                <Header />
                 <div className="container2" style={{ height: "100vh" }}>
                     <h1 id='title'>User Management</h1>
                     <button className="blueBtn" style={{ marginBottom: "5%" }}

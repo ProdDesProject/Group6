@@ -3,7 +3,6 @@ import DatePicker from "react-datepicker";
 import LoadingScreen from "./LoadingScreen";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "../CSS/Reservation.module.css";
-import Header from './Heading';
 
 const Calendar = (props) => {
     //const [startDate, setStartDate] = useState(new Date());
@@ -100,7 +99,6 @@ export default class Reservation extends Component {
         let pass = (({ busy, owned, reserve }) => ({ busy, owned, reserve }))(this.state);
         return (
             <>
-                <Header />
                 {this.state.loading === true ? <LoadingScreen /> : (
                     <div className="container mt-5 container2">
 
