@@ -30,64 +30,95 @@ export default class App extends Component {
     this.setState({ isLogin: false, isAdmin: false })
   }
   render() {
-    return (
-      <BrowserRouter>
-        <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole}/>
-        <Switch>
-          <Route
-            path="/admin/robot-management"
-            render={routerProps => (
-              <RManagment {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/admin/user-management"
-            render={routerProps => (
-              <UserManagement {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/admin/dashboard"
-            render={routerProps => (
-              <AdminDashboard {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/admin/reservation-management">
-            <AdminReservationManagement />
-          </Route>
-          <Route
-            path="/user/reservation"
-            render={routerProps => (
-              <Reservation {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/user/myreservations"
-            render={routerProps => (
-              <Myreservations {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/user/robots"
-            render={routerProps => (
-              <Chooserobot {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/Login"
-            render={routerProps => (
-              <Login {...routerProps} setRole={this.setRole} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
-            )}
-          />
-          <Route
-            path="/"
-            render={routerProps => (
-              <Welcome {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-        </Switch>
-      </BrowserRouter>
-    )
+    if (this.state.isLogin === true && this.state.isAdmin === true) {
+      return (
+        <BrowserRouter>
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Switch>
+            <Route
+              path="/admin/robot-management"
+              render={routerProps => (
+                <RManagment {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/admin/user-management"
+              render={routerProps => (
+                <UserManagement {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/admin/dashboard"
+              render={routerProps => (
+                <AdminDashboard {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/admin/reservation-management">
+              <AdminReservationManagement />
+            </Route>
+            <Route
+              path="/"
+              render={routerProps => (
+                <Welcome {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+          </Switch>
+        </BrowserRouter>
+      )
+    }
+    else if (this.state.isLogin === true && this.state.isAdmin === false) {
+      return (
+        <BrowserRouter>
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Switch>
+            <Route
+              path="/user/reservation"
+              render={routerProps => (
+                <Reservation {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/user/myreservations"
+              render={routerProps => (
+                <Myreservations {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/user/robots"
+              render={routerProps => (
+                <Chooserobot {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+            <Route
+              path="/"
+              render={routerProps => (
+                <Welcome {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+          </Switch>
+        </BrowserRouter>
+      )
+    }
+    else
+      return (
+        <BrowserRouter>
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Switch>
+            <Route
+              path="/Login"
+              render={routerProps => (
+                <Login {...routerProps} setRole={this.setRole} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
+              )}
+            />
+            <Route
+              path="/"
+              render={routerProps => (
+                <Welcome {...routerProps} example_state={this.state.example_state} />
+              )}
+            />
+          </Switch>
+        </BrowserRouter>
+      )
   }
 }
