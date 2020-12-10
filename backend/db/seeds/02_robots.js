@@ -5,9 +5,9 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('robots').insert([
-        {name: 'Robot1', type: 'type1', payload: 1},
-        {name: 'Robot2', type: 'type2', payload: 2},
-        {name: 'Robot3', type: 'type1', payload: 1},
+        {name: 'Robot1', type: 'type1', url: "url_to_image1.png", description: "description1"},
+        {name: 'Robot2', type: 'type2', url: "url_to_image2.png", description: "description2"},
+        {name: 'Robot3', type: 'type1', url: "url_to_image3.png", description: "description3"}
       ]);
     });
 };

@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
   });
 
 // get robots by id
-// GET http://localhost:3000/robots/1
+// GET http://localhost:3000/robots/{interger}
 router.get('/:id', (req, res) => {
     robots.query()
         .findById(req.params.id)
@@ -22,36 +22,36 @@ router.get('/:id', (req, res) => {
   });
 
 // get robots by name
-// GET http://localhost:3000/robots/name/2
-router.get('/:name', (req, res) => {
+// GET http://localhost:3000/robots/name/{string(20)}
+router.get('/name/:name', (req, res) => {
     robots.query()
-        .findByName(req.params.name)
+        .where('name', req.params.name)
         .then(robots => {
           res.json(robots)
         })
   });
 
-// delete robots by id
-// GET http://localhost:3000/robots/1
-router.get('/delete/:id', (req, res) => {
-    robots.query()
-        .deleteById(req.params.id)
-        .then(robots => {
-          res.json(robots)
-        })
-  });
-
+// get robots by type
+// GET http://localhost:3000/robots/type/{string(5)}
+router.get('/type/:type', (req, res) => {
+  robots.query()
+    .where('type', req.params.type)
+    .then(robots => {
+      res.json(robots)
+    })
+});
 
 // create new robot
 // POST baseurl/robots/add    # give reservation params as json, body->raw->json
 /*
-    POST http://localhost:3000/robotss/add/ HTTP/1.1
+    POST http://localhost:3000/robots/add/ HTTP/1.1
     Content-Type: application/json
 
     {
         "name": "robot1",
         "type": "type1",
-        "payload": 4
+        "url": "image_url",
+        "description": "desciption1"
     }
 */
 router.post('/add', async (req, res) => {
@@ -63,6 +63,29 @@ router.post('/add', async (req, res) => {
         res.send(insertedGraph);
   });
 
+// update robots
+// PUT http://localhost:3000/robots/update/{integer}
+router.put('/update/:id', (req, res) => {
+  const upd = req.body;
+  robots.query()
+    .patch(upd)
+    .where('id', req.params.id)
+    .then(robots => {
+      res.json(robots)
+    })
+});
+
+
+// delete robots by id
+// GET http://localhost:3000/robots/{integer}
+router.get('/delete/:id', (req, res) => {
+    robots.query()
+        .delete()
+        .where('id', req.params.id)
+        .then(robots => {
+          res.json(robots)
+        })
+  });
 
 
 
