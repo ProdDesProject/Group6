@@ -16,13 +16,23 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      example_state: "example state string"
+      example_state: "example state string",
+      isLogin: false,
+      isAdmin: false
     }
+    this.setRole = this.setRole.bind(this)
+    this.unsetRole = this.unsetRole.bind(this)
+  }
+  setRole({ isLogin, isAdmin }) {
+    this.setState({ isLogin: isLogin, isAdmin: isAdmin })
+  }
+  unsetRole() {
+    this.setState({ isLogin: false, isAdmin: false })
   }
   render() {
     return (
       <BrowserRouter>
-        <Header/>
+        <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole}/>
         <Switch>
           <Route
             path="/admin/robot-management"
@@ -67,7 +77,7 @@ export default class App extends Component {
           <Route
             path="/Login"
             render={routerProps => (
-              <Login {...routerProps} example_state={this.state.example_state} />
+              <Login {...routerProps} setRole={this.setRole} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
             )}
           />
           <Route
