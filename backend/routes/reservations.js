@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const Reservation = require('../models/reservation_model');
+const knex = require('knex')('../knexfile');
+const Reservation = require('../models/reservation');
+const User = require('../models/user')
+const Robot = require('../models/robot')
 
 // get all reservations
-// GET http://localhost:3000/reservations/
+// GET baseurl/reservations
 router.get('/', function(req, res, next) {
   Reservation.query()
       .then(reservations => {
@@ -12,81 +15,63 @@ router.get('/', function(req, res, next) {
 });
 
 // get reservation by id
-// GET http://localhost:3000/reservations/1
+// GET baseurl/reservations/{id}
 router.get('/:id', (req, res) => {
     Reservation.query()
         .findById(req.params.id)
         .then(reservations => {
           res.json(reservations)
         })
+    console.log(req.params.id);
   });
 
 // get reservation by userId
-// GET http://localhost:3000/reservations/userId/2
-router.get('/userId/:userId', (req, res) => {
-    Reservation.query()
-        .where('userId', req.params.userId)
-        .then(reservations => {
-          res.json(reservations)
-        })
+// GET baseurl/reservations/userId/{id} 
+router.get('/userId/:userId', async (req, res) => {
+    var user = await User.where('id', req.params.userId).fetch({
+        withRelated: ["reservations"]
+      });
+      res.json(user.related("reservations"));    
   });
 
 // get reservation by robotId
-// GET http://localhost:3000/reservations/robotId/2
-router.get('/robotId/:robotId', (req, res) => {
-    Reservation.query()
-        .where('robotId', req.params.robotId)
-        .then(reservations => {
-          res.json(reservations)
-        })
+// GET baseurl/reservations/robotId/{id} 
+router.get('/robotId/:robotId', async (req, res) => {
+    var robot = await Robot.where('id', req.params.robotId).fetch({
+        withRelated: ["robres"]
+      });
+      res.json(robot.related("robres"));    
   });
+  
 
 // create new reservation
 // POST baseurl/reservations/add    # give reservation params as json, body->raw->json
-/*
-    POST http://localhost:3000/reservations/add/ HTTP/1.1
-    Content-Type: application/json
-
-    {
-        "id": 4,
-        "userId": 2,
-        "robotId": 3,
-        "startDate": "2020-12-09 10:00:00",
-        "dueDate": "2020-12-09 11:00:00"
-    }
-*/
 router.post('/add', async (req, res) => {
-    const graph = req.body;
-    let insertedGraph = await Reservation
-        .query()
-        .insertGraph((graph)
-        );
-        res.send(insertedGraph);
+    var reservation = await Reservation.forge({
+        userId: req.body.userId,
+        robotId: req.body.robotId,
+        startDate: req.body.startDate,
+        dueDate: req.body.dueDate
+    }).save();
+        res.json(reservation);
   });
 
 // update reservation 
-// PUT http://localhost:3000/reservations/update/3
-router.put('/update/:id', (req, res) => {
-    const upd = req.body;
-    Reservation.query()
-        .patch(upd)
-        .where('id', req.params.id)
-        .then(reservations => {
-            res.json(reservations)
-            console.dir('updated reservation id "' + req.params.id + '" with ' + JSON.stringify(upd))
-        })
+// PUT baseurl/reservation/update/{id}
+router.put('/update/:id', async (req, res) => {
+    var reservation = await Reservation.where('id', req.params.id)
+    .save({ ...req.body },
+        { patch: true }
+        );
+        res.json(reservation);
 });
 
-// delete reservation
-// DELETE http://localhost:3000/reservations/delete/3
-router.delete('/delete/:id', (req,res) => {
-    Reservation.query()
-        .delete()
-        .where('id', req.params.id)
-        .then(reservations => {
-            res.json(reservations)
-            console.dir('deleted reservation id "' + req.params.id + '"')
-        })
-});  
+// delete reservation by user_id
+// DELETE baseurl/reservations/delete/{id}
+router.delete('/delete/:id', async (req,res) => {
+    var reservation = await Reservation.where('id', req.params.id)
+        .destroy();
+        res.json(reservation);
+});
 
 module.exports = router;

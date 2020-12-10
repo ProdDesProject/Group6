@@ -1,6 +1,26 @@
 var express = require('express');
 var router = express.Router();
-var robots = require('../models/robot_model');
+//var robots = require('../models/robot_model');
+const Robot = require('../models/robot')
+
+// GET baseurl/users
+router.get('/', function(req, res, next) {
+    Robot.query()
+        .then(robots => {
+          res.json(robots)
+        })
+  });
+
+// get robots reservations by id
+router.get('/robotres/:id', (req, res) => {
+    let id = parseInt(req.params.id)
+    Robot.query()
+        .where('id', id)
+        .withGraphFetched('reserved')
+        .then(robots => {
+            res.json(robots)
+        })
+})
 
 // get all robots
 // GET http://localhost:3000/robots/

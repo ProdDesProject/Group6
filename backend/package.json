@@ -7,16 +7,26 @@
     "start-dev": "nodemon ./bin/www"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "bookshelf": "^1.2.0",
+    "bookshelf-secure-password": "^5.0.0",
+    "bookshelf-virtuals-plugin": "^1.0.0",
     "cookie-parser": "^1.4.5",
     "debug": "^2.6.9",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "http-errors": "^1.8.0",
     "jade": "^1.11.0",
+    "jwt-simple": "^0.4.1",
     "knex": "^0.21.12",
+    "lodash": "^4.17.20",
     "morgan": "^1.9.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.6",
-    "objection": "^2.2.3"
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.0.0",
+    "sqlite3": "^5.0.0"
   }
 }
