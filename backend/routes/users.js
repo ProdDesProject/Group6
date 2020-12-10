@@ -2,7 +2,8 @@ var express = require('express');
 const { post } = require('../app');
 var router = express.Router();
 
-const User = require('../models/user_model')
+//const User = require('../models/user_model')
+const User = require('../models/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
