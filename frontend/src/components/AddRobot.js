@@ -11,17 +11,25 @@ const validateRobotData = robotData => {
     } else if (robotData.name.length > 20) {
         errors.name = 'Name cannot exceed 20 characters';
     }
+
     if (!robotData.description) {
         errors.description = "Robot's description is missing";
+    } else if (robotData.description.length > 100) {
+        errors.description = 'Description can not exceed 100 characters';
     }
+
     if (!robotData.type) {
         errors.type = "Robot's type is missing";
-    } else if (robotData.type.length > 10) {
-        errors.type = 'Type cannot exceed 10 characters';
+    } else if (robotData.type.length > 15) {
+        errors.type = 'Type can not exceed 10 characters';
     }
+
     if (!robotData.imgURL) {
         errors.imgURL = "Image's url  is missing"
+    } else if (robotData.imgURL.length > 30) {
+        errors.imgURL = 'Image url can not exceed 30 characters';
     }
+
     return errors;
 }
 

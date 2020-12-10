@@ -5,6 +5,7 @@ import Select from "react-select";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RobotInfo from "./RobotInfoCard";
 import AddRobot from "./AddRobot";
+import { Link } from 'react-router-dom'
 
 class SearchComponent extends Component {
 
@@ -131,7 +132,8 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
           <div className="col-md-4" key={filteredRobot.id}>
-            <RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} />
+            {!this.props.admin && <Link to={`/user/reservation/${filteredRobot.id}`}><RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} /></Link>}
+            {this.props.admin && <RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} />}
             {this.showButtons(filteredRobot.id)}
           </div>
         ))}
@@ -146,7 +148,8 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {robotsinfo.map(robot => (
           <div className="col-md-4" key={robot.id}>
-            <RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} />
+            {!this.props.admin && <Link to={`/user/reservation/${robot.id}`}><RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} /></Link>}
+            {this.props.admin && <RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} />}
             {this.showButtons(robot.id)}
           </div>
         ))}
