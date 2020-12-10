@@ -186,6 +186,7 @@ hr.new2 {
 }
 .customCard{
   margin: 30px 40px 30px 40px;
+  height: 70%;
   color: #06308b;
   cursor: pointer;
   background-image: url("https://www.solidbackgrounds.com/images/5120x2880/5120x2880-light-steel-blue-solid-color-background.jpg");
@@ -225,7 +226,7 @@ hr.new2 {
 
 #reservations tr:nth-child(even){background-color: #bdb8b8;}
 
-#rHeader{
+.rHeader{
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
@@ -367,4 +368,24 @@ hr.new2 {
   height: 200px;
 }
 
+.filterRes{
+  color: white;
+  text-align: start;
+  padding-bottom: 2%;
+}
+.dashboardMenu{
+  padding:10%;
+}
+.dashCard{
+  height: 85%;
+  margin: 40px 50px 40px 50px;
+}
+.dashCard:hover{
+  background: rgb(127, 230, 219); 
+}
+.chooseTimeTable{
+  padding-left: 5%;
+  padding-right: 5%;
+  color: white;
+}
 

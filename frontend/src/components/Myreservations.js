@@ -9,7 +9,7 @@ const Table = () => {
    const [deleledId, setDeletedId] = useState(0);
 
    function renderTableHeader() {
-      return <tr id="rHeader">
+      return <tr className="rHeader">
          <td>#</td>
          <td>Robot's name</td>
          <td>Date</td>
@@ -21,7 +21,7 @@ const Table = () => {
    function deleteReservation(id) {
       const deleteRobot = MyreservationsInfo.findIndex(function (i) {
          return i.id === id;
-      })
+      });
       MyreservationsInfo.splice(deleteRobot, 1);
       setDeletedId(id);
       console.log(`Robot with id ${deleledId} has been successfully deleted`)

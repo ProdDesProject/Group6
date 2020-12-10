@@ -13,7 +13,7 @@ class UserManagement extends Component {
     }
 
     renderTableHeader = () => {
-        return <tr id="rHeader">
+        return <tr className="rHeader">
             <td>userid</td>
             <td>name and surname</td>
             <td>email</td>

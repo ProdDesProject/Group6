@@ -4,14 +4,14 @@ const robots = [
         name: "Smart Board",
         imgURL: "https://open-dynamic-robot-initiative.github.io/solo2.png",
         description: "Smart Board will help you have an interection with the robot",
-        type: "info-system"
+        type: "education"
     },
     {
         id: 2,
         name: "Printing Robot",
         imgURL: "https://www.uvd-robots.com/hubfs/ny%20B%20and%20C%20robots-1.png",
         description: "Printing Robot will help you print in 3D and and it doesn’t require screws for its gripper to articulate.",
-        type: "daily tasks"
+        type: "print"
     },
     {
         id: 3,

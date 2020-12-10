@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import Header from './Heading';
 import LoadingScreen from "./LoadingScreen";
 
 const Calendar = (props) => {
@@ -15,7 +15,7 @@ const Calendar = (props) => {
 };
 
 function renderTableHeader() {
-    return <tr>
+    return <tr className="rHeader">
         <td>#</td>
         <td>username</td>
         <td>Robot's name</td>
@@ -30,7 +30,7 @@ function renderTableData(props) {
     let dateFilter = props.dateFilter;
     let filtered;
     if (dateFilter instanceof Date) {
-        let date = new Date( dateFilter.getTime() + Math.abs(dateFilter.getTimezoneOffset()*60000) )
+        let date = new Date(dateFilter.getTime() + Math.abs(dateFilter.getTimezoneOffset() * 60000))
         filtered = data.filter(i => {
             return i.username.toLowerCase().includes(props.username.toLowerCase())
                 && i.robots_Name.toLowerCase().includes(props.robotname.toLowerCase())
@@ -53,7 +53,7 @@ function renderTableData(props) {
                 <td>{reservation.date}</td>
                 <td>{reservation.time}</td>
                 <td>
-                    <button id="deleteRes" onClick={() => props.confirmation(reservation)}>
+                    <button className="deleteRes" onClick={() => props.confirmation(reservation)}>
                         <i className="far fa-trash-alt" style={{ color: "white" }}></i>
                     </button>
                 </td>
@@ -96,17 +96,18 @@ export default class AdminReservationManagement extends Component {
                 this.setState({ loading: false })
             }, 500)
         } else {
-            
+
         }
     }
     render() {
         return (
             <>
+                <Header />
                 {/* <div className="container2"> */}
                 {this.state.loading ? <LoadingScreen /> : null}
-                <div className="container">
+                <div className="container container2" style={{ height: "100vh" }}>
                     <h1 id='title'>Reservation management</h1>
-                    <div className="m-5">
+                    <div className="m-5 filterRes">
                         <b className="p-2">Filter</b>
                         <table>
                             <tbody>

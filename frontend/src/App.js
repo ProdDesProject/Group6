@@ -20,42 +20,45 @@ export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
-      <Switch>
+        <Switch>
           <Route
-            path="/User/UserManagement"
+            path="/admin/robot-management"
+            render={routerProps => (
+              <RManagment {...routerProps} example_state={this.state.example_state} />
+            )}
+          />
+          <Route
+            path="/admin/user-management"
             render={routerProps => (
               <UserManagement {...routerProps} example_state={this.state.example_state} />
             )}
           />
-      <Route path="/Admin/ReservationManagement"><AdminReservationManagement/></Route>
-      <Route
-            path="/User/Reservation"
+          <Route
+            path="/admin/dashboard"
             render={routerProps => (
-              <Reservation {...routerProps} example_state={this.state.example_state}/>
+              <AdminDashboard {...routerProps} example_state={this.state.example_state} />
             )}
           />
-      <Route
-            path="/Admin/Dashboard"
+          <Route
+            path="/admin/reservation-management">
+            <AdminReservationManagement />
+          </Route>
+          <Route
+            path="/user/reservation"
             render={routerProps => (
-              <AdminDashboard {...routerProps} example_state={this.state.example_state}/>
+              <Reservation {...routerProps} example_state={this.state.example_state} />
             )}
           />
-      <Route
-            path="/User/Myreservations"
+          <Route
+            path="/user/myreservations"
             render={routerProps => (
               <Myreservations {...routerProps} example_state={this.state.example_state} />
             )}
           />
           <Route
-            path="/User/Chooserobot"
+            path="/user/robots"
             render={routerProps => (
               <Chooserobot {...routerProps} example_state={this.state.example_state} />
-            )}
-          />
-          <Route
-            path="/User/History"
-            render={routerProps => (
-              <RManagment {...routerProps} example_state={this.state.example_state} />
             )}
           />
           <Route

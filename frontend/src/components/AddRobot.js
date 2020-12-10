@@ -16,6 +16,8 @@ const validateRobotData = robotData => {
     }
     if (!robotData.type) {
         errors.type = "Robot's type is missing";
+    } else if (robotData.type.length > 10) {
+        errors.type = 'Type cannot exceed 10 characters';
     }
     if (!robotData.imgURL) {
         errors.imgURL = "Image's url  is missing"
