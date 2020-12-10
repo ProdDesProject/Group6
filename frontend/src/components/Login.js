@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Header from './Heading';
+import { Redirect } from "react-router-dom";
 
 export default class Login extends Component {
     constructor(props) {
@@ -16,29 +16,43 @@ export default class Login extends Component {
     }
     handleSubmit(event) {
         event.preventDefault();
-        console.log(this.state)
+        if (this.state.username === "s" && this.state.password === "s") {
+            this.props.setRole({ isLogin: true, isAdmin: false })
+
+        } else if (this.state.username === "t" && this.state.password === "t") {
+            this.props.setRole({ isLogin: true, isAdmin: true })
+        }
+        console.log("Login clicked")
     }
     render() {
-        return (
-            <div>
-                <Header />
-                <div className="container background-container mt-5">
-                    <div className="border border-dark rounded p-5">
-                        <form onSubmit={this.handleSubmit}>
-                            <h2 className="d-flex justify-content-center">Login</h2>
-                            <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" name="username" onChange={this.handleChange} />
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" name="password" onChange={this.handleChange} />
-                            </div>
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </form>
+        if (this.props.isLogin && this.props.isAdmin) {
+            return <Redirect to="/admin/dashboard"></Redirect>
+        }
+        else if (this.props.isLogin === true && this.props.isAdmin === false) {
+            return <Redirect to="/user/robots"></Redirect>
+        }
+        else {
+            return (
+                <div>
+                    <div className="container background-container mt-5">
+                        <div className="border border-dark rounded p-5">
+                            <form onSubmit={this.handleSubmit}>
+                                <h2 className="d-flex justify-content-center">Login</h2>
+                                <div className="form-group">
+                                    <label htmlFor="username">Username</label>
+                                    <input type="text" className="form-control" name="username" onChange={this.handleChange} />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor="password">Password</label>
+                                    <input type="password" className="form-control" name="password" onChange={this.handleChange} />
+                                </div>
+                                <button type="submit" className="btn btn-primary">Login</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
+
     }
 }

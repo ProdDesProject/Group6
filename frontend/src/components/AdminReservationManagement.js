@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Header from './Heading';
 import LoadingScreen from "./LoadingScreen";
 
 const Calendar = (props) => {
@@ -102,7 +101,6 @@ export default class AdminReservationManagement extends Component {
     render() {
         return (
             <>
-                <Header />
                 {/* <div className="container2"> */}
                 {this.state.loading ? <LoadingScreen /> : null}
                 <div className="container container2" style={{ height: "100vh" }}>

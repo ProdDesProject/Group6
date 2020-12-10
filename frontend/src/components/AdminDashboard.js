@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import UserIcon from "../icons/user-icon.png";
 import RobotIcon from "../icons/robot.png";
 import CalendarIcon from "../icons/calendar.png";
-import Header from './Heading';
 
 export default class AdminDashboard extends Component {
     render() {
@@ -14,7 +13,6 @@ export default class AdminDashboard extends Component {
         }
         return (
             <div>
-                <Header />
                 <div className="container mt-5 container2 dashboardMenu ">
                     <div className="row">
                         <div className="col">

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import DropdownMenu from './DropdownMenu';
 
-function Header() {
+function Header(props) {
     return (
         <header className="customHeader">
             <Heading>
                 <NavItem item={<i className='fas fa-home'></i>} path="/" />
-                <NavItem item="Login" path="/Login" />
-                <NavItem item="Dashboard" path="/admin/dashboard" />
-                <NavItem item={<i className="fas fa-bars"></i>}><DropdownMenu /></NavItem>
+                {props.isLogin ? null : <NavItem item="Login" path="/Login" />}
+                {props.isLogin ? <NavItem item="Logout" unsetRole={props.unsetRole} /> : null}
+                {props.isAdmin ? <NavItem item="Dashboard" path="/admin/dashboard" /> : null}
+                {props.isLogin ? <NavItem item={<i className="fas fa-bars"></i>} path="#"><DropdownMenu isAdmin={props.isAdmin} /></NavItem> : null}
             </Heading>
         </header>
     );
@@ -30,7 +31,13 @@ function Heading(props) {
 function NavItem(props) {
 
     const [openmenu, setOpenmenu] = useState(false);
+    const history = useHistory()
 
+    if (props.item === "Logout") {
+        return <li className="nav-item menuLinks">
+            <Link className="nav-link navl" to="#" onClick={() => {props.unsetRole(); history.push("/")}}>{props.item}</Link>
+        </li>
+    }
     //change it to props.items
     return (<li className="nav-item menuLinks">
         <Link to={props.path} className="nav-link navl" onClick={() => setOpenmenu(!openmenu)}>
@@ -40,6 +47,7 @@ function NavItem(props) {
     </li>
     );
 }
+
 
 
 export default Header;
