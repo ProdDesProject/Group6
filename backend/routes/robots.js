@@ -45,7 +45,7 @@ router.get('/:id', (req, res) => {
 // GET http://localhost:3000/robots/name/{string(20)}
 router.get('/name/:name', (req, res) => {
     robots.query()
-        .where('name', req.params.name)
+        .where('name', 'like', req.params.name)
         .then(robots => {
           res.json(robots)
         })
