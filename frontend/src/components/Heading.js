@@ -9,7 +9,7 @@ function Header(props) {
             <Heading>
                 <NavItem item={<i className='fas fa-home'></i>} path="/" />
                 {props.isLogin ? null : <NavItem item="Login" path="/Login" />}
-                {props.isLogin ? <NavItem item="Logout" unsetRole={props.unsetRole} /> : null}
+                {props.isLogin ? <NavItem item="Logout" logout={props.logout} /> : null}
                 {props.isAdmin ? <NavItem item="Dashboard" path="/admin/dashboard" /> : null}
                 {props.isLogin ? <NavItem item={<i className="fas fa-bars"></i>} path="#"><DropdownMenu isAdmin={props.isAdmin} /></NavItem> : null}
             </Heading>
@@ -35,7 +35,7 @@ function NavItem(props) {
 
     if (props.item === "Logout") {
         return <li className="nav-item menuLinks">
-            <Link className="nav-link navl" to="#" onClick={() => {props.unsetRole(); history.push("/")}}>{props.item}</Link>
+            <Link className="nav-link navl" to="#" onClick={() => {props.logout(); history.push("/")}}>{props.item}</Link>
         </li>
     }
     //change it to props.items
