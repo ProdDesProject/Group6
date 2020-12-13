@@ -29,9 +29,9 @@ router.post('/login', function(req, res) {
             const token = jwt.encode(user.omit('password'), securityConfig.jwtSecret);
             res.json({success: true, token: `JWT ${token}`, adminStatus: status(parseUser.name), id: user.id});
         } else {
-            res.json({success: false, msg: 'Authentication failed'});
+            res.sendStatus(400);
         }
-    })().catch(err => console.log(err));
+    })().catch(err => res.sendStatus(400));
 });
 
 router.post('/register', function(req, res) {
