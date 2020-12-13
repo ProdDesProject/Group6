@@ -5,8 +5,8 @@ exports.up = function(knex, Promise) {
         table.foreign('userId').references('id').inTable('users');
         table.integer('robotId').unsigned();
         table.foreign('robotId').references('id').inTable('robots');
-        table.dateTime('startDate');
-        table.dateTime('dueDate');
+        table.string('date');
+        table.string('time');
     });
 };
 

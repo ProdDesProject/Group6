@@ -70,7 +70,7 @@ content-type: application/json
       }
     ]
   }
-*/
+
 router.post('/add_reservation/', async (req, res) => {
     const graph = req.body;
     const insertedRes = await User.query()
@@ -78,7 +78,7 @@ router.post('/add_reservation/', async (req, res) => {
         .insertGraph((graph)
         );
         res.send(insertedRes);
-})
+})*/
 
 
 module.exports = router;

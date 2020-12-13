@@ -4,8 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyparser = require('body-parser');
+var cors = require('cors');
 const passport = require('passport');
 const configurePassport = require('./config/passport-jwt-config');
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var robotsRouter = require('./routes/robots');
@@ -32,6 +35,7 @@ app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

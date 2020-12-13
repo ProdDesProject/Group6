@@ -19,8 +19,12 @@ router.post('/add'), (req, res) => {
         .then(user => res.json(user.omit('password')));
 };
 
-router.get('/securedArea', jwtAuth, authorizedRoles('ROLE_ADMIN'), function(req, res) {
+/*router.get('/securedArea', jwtAuth, authorizedRoles('ROLE_ADMIN'), function(req, res) {
     res.json({msg: "You made it to the secure area"});
 });
+
+router.get('/user', jwtAuth, function(req, res) {
+    res.json(req.user);
+});*/
 
 module.exports = router;
