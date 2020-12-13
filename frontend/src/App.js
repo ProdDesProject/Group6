@@ -18,22 +18,26 @@ export default class App extends Component {
     this.state = {
       example_state: "example state string",
       isLogin: false,
-      isAdmin: false
+      isAdmin: false,
+      userId: null,
+      token: ""
     }
-    this.setRole = this.setRole.bind(this)
-    this.unsetRole = this.unsetRole.bind(this)
+    this.login = this.login.bind(this)
+    this.logout = this.logout.bind(this)
   }
-  setRole({ isLogin, isAdmin }) {
-    this.setState({ isLogin: isLogin, isAdmin: isAdmin })
+  login({ isLogin, isAdmin, userId, token }) {
+    console.log("set state triggered")
+    this.setState({ isLogin, isAdmin, userId, token })
   }
-  unsetRole() {
+  logout() {
+    console.log("logged out")
     this.setState({ isLogin: false, isAdmin: false })
   }
   render() {
     if (this.state.isLogin === true && this.state.isAdmin === true) {
       return (
         <BrowserRouter>
-          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} logout={this.logout} />
           <Switch>
             <Route
               path="/admin/robot-management"
@@ -58,6 +62,12 @@ export default class App extends Component {
               <AdminReservationManagement />
             </Route>
             <Route
+              path="/Login"
+              render={routerProps => (
+                <Login {...routerProps} login={this.login} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
+              )}
+            />
+            <Route
               path="/"
               render={routerProps => (
                 <Welcome {...routerProps} example_state={this.state.example_state} />
@@ -70,7 +80,7 @@ export default class App extends Component {
     else if (this.state.isLogin === true && this.state.isAdmin === false) {
       return (
         <BrowserRouter>
-          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} logout={this.logout} />
           <Switch>
             <Route
               path="/user/reservation"
@@ -91,6 +101,12 @@ export default class App extends Component {
               )}
             />
             <Route
+              path="/Login"
+              render={routerProps => (
+                <Login {...routerProps} login={this.login} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
+              )}
+            />
+            <Route
               path="/"
               render={routerProps => (
                 <Welcome {...routerProps} example_state={this.state.example_state} />
@@ -103,12 +119,12 @@ export default class App extends Component {
     else
       return (
         <BrowserRouter>
-          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} unsetRole={this.unsetRole} />
+          <Header isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} logout={this.logout} />
           <Switch>
             <Route
               path="/Login"
               render={routerProps => (
-                <Login {...routerProps} setRole={this.setRole} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
+                <Login {...routerProps} login={this.login} isLogin={this.state.isLogin} isAdmin={this.state.isAdmin} />
               )}
             />
             <Route

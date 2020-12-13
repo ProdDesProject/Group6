@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import { Redirect } from "react-router-dom";
+import axios from "axios"
+import domain from "../domain"
+import LoadingScreen from "./LoadingScreen";
 
 export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username: "",
-            password: ""
+            password: "",
+            loading: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,11 +21,40 @@ export default class Login extends Component {
     handleSubmit(event) {
         event.preventDefault();
         if (this.state.username === "s" && this.state.password === "s") {
-            this.props.setRole({ isLogin: true, isAdmin: false })
+            this.props.login({ isLogin: true, isAdmin: false })
 
         } else if (this.state.username === "t" && this.state.password === "t") {
-            this.props.setRole({ isLogin: true, isAdmin: true })
+            this.props.login({ isLogin: true, isAdmin: true })
         }
+        this.setState({loading: true})
+        axios.post(domain+"/auth/login",
+            {
+                email: this.state.username,
+                password: this.state.password
+            },
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            }
+        )
+            .then((response) => {
+                this.setState({loading: false})
+                console.log(response.data)
+                let data =  response.data
+                if (data.success===false) {
+                    window.alert("Wrong username or password")
+                }
+                else if (data.success===true) {
+                    console.log("login success")
+                    this.props.login({isLogin: data.success, isAdmin: data.adminStatus, userId: data.id, token: data.token})
+                }
+            })
+            .catch((response) => {
+                this.setState({loading: false})
+                console.log("Error!")
+            });
         console.log("Login clicked")
     }
     render() {
@@ -34,6 +67,7 @@ export default class Login extends Component {
         else {
             return (
                 <div>
+                    {this.state.loading?<LoadingScreen/>:null}
                     <div className="container background-container mt-5">
                         <div className="border border-dark rounded p-5">
                             <form onSubmit={this.handleSubmit}>
