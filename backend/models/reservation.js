@@ -11,5 +11,7 @@ var Reservation = bookshelf.Model.extend({
     },
     robots() {
         return this.belongsToMany(Robot)
-    }
-}); module.exports = bookshelf.model('Reservation', Reservation);
+    },
+});
+
+module.exports = bookshelf.model('Reservation', Reservation);

@@ -6,6 +6,9 @@ const bcrypt = Promise.promisifyAll(require('bcryptjs'));
 const Role = require('./role');
 const Reservation = require('./reservation');
 const securityConfig = require('../config/security-config');
+const cascadeDelete = require('bookshelf-cascade-delete');
+
+bookshelf.plugin(cascadeDelete);
 
 const User = bookshelf.model('User', {
     tableName: 'users',
@@ -29,4 +32,8 @@ const User = bookshelf.model('User', {
             })();
         });
     }
-}); module.exports = User;
+}, {
+    dependents: ['reservations']
+
+}
+); module.exports = User;

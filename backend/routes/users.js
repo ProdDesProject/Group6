@@ -36,6 +36,19 @@ router.post("/add", async (req,res) => {
   res.json(user);
 });
 
+/* router.delete('/delete/:userId', async (res,req) => {
+  const userId = Number(req.params.userId);
+  var user = await User.where('id', userId).destroy();
+  res.json(user);
+}); */
+
+router.delete('/delete/:id', async (req,res) => {
+  var user = await User.where('id', req.params.id)
+      .destroy().catch(err => res.sendStatus(400));
+      res.status(200).json(user);
+});
+
+
 // get user's reservations by id
 // GET http://localhost:3000/users/userres/1
 /* router.get('/user_reservation/:id', (req, res) => {
@@ -50,9 +63,8 @@ router.post("/add", async (req,res) => {
 
 router.get('/user_reservation/:id', async (req,res) => {
   var user = await User.where('id', req.params.id).fetch({
-    withRelated: ["reservations"]
-  });
-  res.json(user)
+    withRelated: ["reservations"]}).catch(err => res.sendStatus(400));
+    res.status(200).json(user.related("reservations"));
 });
 
 //User time booking API
