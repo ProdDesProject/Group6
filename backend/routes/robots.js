@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 //var robots = require('../models/robot_model');
 const Robot = require('../models/robot')
-const jwtAuth = require('../middleware/jwt-authenticate');
+//const jwtAuth = require('../middleware/jwt-authenticate');
 
 // get robots reservations by id
 router.get('/robotres/:id', (req, res) => {
@@ -18,7 +18,7 @@ router.get('/robotres/:id', (req, res) => {
 // get all robots
 // GET http://localhost:3000/robots/
 router.get('/', function(req, res, next) {
-    robots.query()
+    Robot.query()
         .then(robots => {
           res.status(200).json(robots)
         }).catch(err => res.sendStatus(400));
@@ -27,7 +27,7 @@ router.get('/', function(req, res, next) {
 // get robots by id
 // GET http://localhost:3000/robots/{interger}
 router.get('/:id', (req, res) => {
-    robots.query()
+    Robot.query()
         .findById(req.params.id)
         .then(robots => {
           res.status(200).json(robots)
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
 // get robots by name
 // GET http://localhost:3000/robots/name/{string(20)}
 router.get('/name/:name', (req, res) => {
-    robots.query()
+    Robot.query()
         .where('name', 'like', req.params.name)
         .then(robots => {
           res.status(200).json(robots)
@@ -47,7 +47,7 @@ router.get('/name/:name', (req, res) => {
 // get robots by type
 // GET http://localhost:3000/robots/type/{string(5)}
 router.get('/type/:type', (req, res) => {
-  robots.query()
+  Robot.query()
     .where('type', req.params.type)
     .then(robots => {
       res.status(200).json(robots)
@@ -91,11 +91,11 @@ router.put('/update/:id', async (req, res) => {
 
 // delete robots by id
 // GET http://localhost:3000/robots/{integer}
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', async (req, res) => {
   var robot = await Robot.where('id', req.params.id)
-  .destroy().catch(err => res.sendStatus(400));
-  res.status(200).json(robot);
-});
+    .destroy().catch(err => res.sendStatus(400));
+    res.status(200).json(robot);
+  });
 
 
 
