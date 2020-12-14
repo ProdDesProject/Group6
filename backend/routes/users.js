@@ -1,47 +1,44 @@
 var express = require('express');
 const { post } = require('../app');
 var router = express.Router();
+const jwtAuth = require('../middleware/jwt-authenticate');
 
 //const User = require('../models/user_model')
 const User = require('../models/user');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  User.query()
-      .then(users => {
-        res.json(users)
-      })
+
+
+//get localhost:3000/users
+router.get('/', async(req,res) => {
+  var user = await new User().fetchAll();
+  res.json(user);
+  
 });
 
-router.get('/:id', (req, res) => {
-  User.query()
-      .findById(req.params.id)
-      .then(users => {
-        res.json(users)
-      })
-  console.log(req.params.id);
 
+
+
+router.get('/userId/:userId', async (req, res) => {
+  var user = await User.where('id', req.params.userId).fetch({
+  }).catch(err => res.sendStatus(400));
+  res.status(200).json(user);
 });
 
-router.post('/add', async (req, res) => {
-  const graph = req.body;
-  let insertedGraph = await User
-      .query()
-      .insertGraph((graph)
-      );
-      res.send(insertedGraph);
-});
 
-// does this work?
-router.get('/delete/:id', async function (req,res){
-    const numDeleted = await User.query()
-        .deleteById(req.params.id);
-        res.redirect('/users/')
-  });
+
+router.post("/add", async (req,res) => {
+  var user = await User.forge({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    classname: req.body.classname
+  }).save();
+  res.json(user);
+});
 
 // get user's reservations by id
 // GET http://localhost:3000/users/userres/1
-router.get('/user_reservation/:id', (req, res) => {
+/* router.get('/user_reservation/:id', (req, res) => {
     let id = parseInt(req.params.id)
     User.query()
         .where('id', id)
@@ -49,7 +46,29 @@ router.get('/user_reservation/:id', (req, res) => {
         .then(users => {
             res.json(users)
         })
-})
+}) */
+
+router.get('/user_reservation/:id', async (req,res) => {
+  var user = await User.where('id', req.params.id).fetch({
+    withRelated: ["reservations"]
+  });
+  res.json(user)
+});
+
+//User time booking API
+// 
+
+/* router.post('/booking', jwtAuth, async (req,res) => {
+  var reservation = await Reservation.forge({
+      userId: req.user.id,
+      robotId: req.user.robotId,
+      date: req.user.date,
+      time: req.user.time
+  }).save().catch(err => res.sendStatus(400));
+  res.status(200).json(reservation);
+}) */
+
+
 
 // add new user & reservation
 /*
