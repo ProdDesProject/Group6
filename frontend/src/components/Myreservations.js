@@ -17,18 +17,10 @@ function renderTableHeader() {
 }
 
 
-function DeleteReservation(id) {
-   const [deleledId, setDeletedId] = useState(0);
-   const deleteRobot = id.findIndex(function (i) {
-      return i.id === id;
-   });
-   id.splice(deleteRobot, 1);
-   setDeletedId(id);
-   console.log(`Robot with id ${deleledId} has been successfully deleted`)
-}
 
 
-function renderTableData(data) {
+
+function renderTableData({data, DeleteReservation}) {
    return data.map((reservation, index) => {
       return (
          <tr key={reservation.id}>
@@ -37,7 +29,7 @@ function renderTableData(data) {
             <td>{convertDate(reservation.date)}</td>
             <td>{reservation.time}</td>
             <td><button className="deleteRes" onClick={() => {
-               var message = `Are you sure you want to delete this reservation?\n\nRobot's name: ${reservation.robots_Name} \nDate: ${reservation.date}\nTime: ${reservation.time}`
+               var message = `Are you sure you want to delete this reservation?\n\nRobot's name: ${reservation.robotname} \nDate: ${reservation.date}\nTime: ${reservation.time}`
                if (window.confirm(message))
                   DeleteReservation(reservation.id)
             }}>
@@ -61,6 +53,7 @@ export default class Myreservations extends Component {
          data: [],
          loading: false
       }
+      this.DeleteReservation = this.DeleteReservation.bind(this)
    }
    componentDidMount() {
       this.setState({ loading: true })
@@ -72,15 +65,35 @@ export default class Myreservations extends Component {
             if (response.status === 200) {
                this.setState({ data: data })
             }
-            //  else if (data.success===true) {
-            //      console.log("login success")
-            //      this.props.login({isLogin: data.success, isAdmin: data.adminStatus, userId: data.id, token: data.token})
-            //  }
          })
-         .catch((response) => {
+         .catch((err) => {
             this.setState({ loading: false })
             console.log("Error!")
          });
+   }
+   DeleteReservation(id) {
+      this.setState({ loading: true })
+      Axios.delete(domain + "/reservations/delete/" + id, {
+         headers: {
+            Authorization: this.props.token
+         }
+      })
+         .then(response => {
+            if (response.status === 200) {
+               Axios.get(domain + "/reservations/userId/" + this.props.userId)
+                  .then((response) => {
+                     let data = response.data
+                     if (response.status === 200) {
+                        console.log("Delete success")
+                        this.setState({ data: data, loading: false })
+                     }
+                  })
+                  .catch((err) => {
+                     this.setState({ loading: false })
+                     console.log("Error!")
+                  });
+            }
+         })
    }
    render() {
       return (
@@ -91,7 +104,7 @@ export default class Myreservations extends Component {
                <table id='reservations'>
                   <tbody>
                      {renderTableHeader()}
-                     {renderTableData(this.state.data)}
+                     {renderTableData({data: this.state.data, DeleteReservation: this.DeleteReservation})}
                   </tbody>
                </table>
             </div>
