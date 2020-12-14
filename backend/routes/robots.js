@@ -2,14 +2,7 @@ var express = require('express');
 var router = express.Router();
 //var robots = require('../models/robot_model');
 const Robot = require('../models/robot')
-
-// GET baseurl/users
-router.get('/', function(req, res, next) {
-    Robot.query()
-        .then(robots => {
-          res.json(robots)
-        })
-  });
+const jwtAuth = require('../middleware/jwt-authenticate');
 
 // get robots reservations by id
 router.get('/robotres/:id', (req, res) => {
@@ -18,8 +11,8 @@ router.get('/robotres/:id', (req, res) => {
         .where('id', id)
         .withGraphFetched('reserved')
         .then(robots => {
-            res.json(robots)
-        })
+            res.status(200).json(robots)
+        }).catch(err => res.sendStatus(400));
 })
 
 // get all robots
@@ -27,8 +20,8 @@ router.get('/robotres/:id', (req, res) => {
 router.get('/', function(req, res, next) {
     robots.query()
         .then(robots => {
-          res.json(robots)
-        })
+          res.status(200).json(robots)
+        }).catch(err => res.sendStatus(400));
   });
 
 // get robots by id
@@ -37,8 +30,8 @@ router.get('/:id', (req, res) => {
     robots.query()
         .findById(req.params.id)
         .then(robots => {
-          res.json(robots)
-        })
+          res.status(200).json(robots)
+        }).catch(err => res.sendStatus(400));
   });
 
 // get robots by name
@@ -47,8 +40,8 @@ router.get('/name/:name', (req, res) => {
     robots.query()
         .where('name', 'like', req.params.name)
         .then(robots => {
-          res.json(robots)
-        })
+          res.status(200).json(robots)
+        }).catch(err => res.sendStatus(400));
   });
 
 // get robots by type
@@ -57,8 +50,8 @@ router.get('/type/:type', (req, res) => {
   robots.query()
     .where('type', req.params.type)
     .then(robots => {
-      res.json(robots)
-    })
+      res.status(200).json(robots)
+    }).catch(err => res.sendStatus(400));
 });
 
 // create new robot
@@ -75,37 +68,34 @@ router.get('/type/:type', (req, res) => {
     }
 */
 router.post('/add', async (req, res) => {
-    const graph = req.body;
-    let insertedGraph = await robots
-        .query()
-        .insertGraph((graph)
-        );
-        res.send(insertedGraph);
-  });
+  var robot = await Robot.forge({
+    name: req.body.name,
+    type: req.body.type,
+    url:  req.body.url,
+    description: req.body.description
+  }).save().catch(err => res.sendStatus(400));
+  res.status(200).json(robot);
+});
 
 // update robots
 // PUT http://localhost:3000/robots/update/{integer}
-router.put('/update/:id', (req, res) => {
-  const upd = req.body;
-  robots.query()
-    .patch(upd)
-    .where('id', req.params.id)
-    .then(robots => {
-      res.json(robots)
-    })
+router.put('/update/:id', async (req, res) => {
+  var robot = await Robot.where('id', req.params.id)
+  .save({ ...req.body },
+    { patch: true }
+    ).catch(err => res.sendStatus(400));
+
+  res.status(200).json(robot);
 });
 
 
 // delete robots by id
 // GET http://localhost:3000/robots/{integer}
 router.get('/delete/:id', (req, res) => {
-    robots.query()
-        .delete()
-        .where('id', req.params.id)
-        .then(robots => {
-          res.json(robots)
-        })
-  });
+  var robot = await Robot.where('id', req.params.id)
+  .destroy().catch(err => res.sendStatus(400));
+  res.status(200).json(robot);
+});
 
 
 
