@@ -93,7 +93,7 @@ export default class App extends Component {
             <Route
               path="/user/myreservations"
               render={routerProps => (
-                <Myreservations {...routerProps} example_state={this.state.example_state} />
+                <Myreservations {...routerProps} userId={this.state.userId} />
               )}
             />
             <Route
