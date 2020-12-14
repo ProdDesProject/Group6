@@ -91,7 +91,7 @@ router.put('/update/:id', async (req, res) => {
 
 // delete robots by id
 // GET http://localhost:3000/robots/{integer}
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', async (req, res) => {
   var robot = await Robot.where('id', req.params.id)
   .destroy().catch(err => res.sendStatus(400));
   res.status(200).json(robot);
