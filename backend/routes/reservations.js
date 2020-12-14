@@ -85,6 +85,7 @@ router.get('/robots/:robotId&:date', jwtAuth, async(req,res) => {
         })*/
 });
 
+
 /*
 // delete reservation by user_id
 // DELETE baseurl/reservations/delete/{id}
