@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const knex = require('knex')('../knexfile');
+const knexConfig = require('../knexfile');
+const knex = require('knex')(knexConfig);
 const Reservation = require('../models/reservation');
 const User = require('../models/user')
 const Robot = require('../models/robot')
@@ -13,6 +14,37 @@ router.get('/', function(req, res) {
     .then(reservations => {
     res.status(200).json(reservations)
     }).catch(err => res.sendStatus(400));
+});
+
+// get all reservations with user name, user email and robot name, robot type
+// GET baseurl/reservations/management
+router.get('/management', async (req, res) => {
+    try {
+        let reservations = await knex.select('*').from('reservations')
+        let users = await knex.select('id',"name","email").from('users')
+        let robots = await knex.select('id',"name","type").from('robots')
+        reservations.forEach(r => {
+            users.forEach(u=>{
+                if (r.userId==u.id) {
+                    r.username=u.name;
+                    r.email=u.email;
+                }
+            })
+        });
+        reservations.forEach(r=>{
+            robots.forEach(o=>{
+                if(r.robotId==o.id) {
+                    r.robotname=o.name;
+                    r.robotType=o.type
+                }
+            })
+        })
+        res.status(200).json(reservations);
+    }
+    catch(err) {
+        console.log(err)
+    }
+    
 });
 
 // get reservation by id

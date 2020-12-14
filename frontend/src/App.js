@@ -58,9 +58,11 @@ export default class App extends Component {
               )}
             />
             <Route
-              path="/admin/reservation-management">
-              <AdminReservationManagement />
-            </Route>
+              path="/admin/reservation-management"
+              render={routerProps => (
+                <AdminReservationManagement {...routerProps} token={this.state.token} />
+              )}
+            />
             <Route
               path="/Login"
               render={routerProps => (
