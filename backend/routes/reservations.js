@@ -118,17 +118,25 @@ router.post('/add_new', jwtAuth, async (req,res) => {
 })
 
 // get robot schedule api
-// GET http://localhost:3000/reservations/robots/{id}&{date}
-router.get('/robots/:robotId&:date', jwtAuth, async(req,res) => {
-    Reservation.query({where: {robotId: req.params.robotId, date: req.params.date
-    //,userId: req.user.id
-    }}).fetchAll({columns: ['time', 'userId']}).then(own=>
-        {
-            res.status(200).send("current user id: " + req.user.id + ", all reservations: " + JSON.stringify(own));
-        }).catch(err => res.sendStatus(400));   
-    /*Reservation.query({where: {robotId: req.params.robotId, date: req.params.date}}).fetchAll({columns: ['time', 'userId']}).then(reservations => {
-        res.json(reservations)
-        })*/
+// POST http://localhost:3000/reservations/robot-schedule
+router.post('/robot-schedule', jwtAuth, async(req,res) => {
+    try {
+        let myReservation = await knex.select("*").from("reservations").where("date",req.body.date).where("robotId",req.body.robotId).where("userId",req.user.id)
+        let othersReservation = await knex.select("*").from("reservations").where("date",req.body.date).where("robotId",req.body.robotId).whereNot("userId",req.user.id)
+        let myTime = []
+        let othersTime = []
+        myReservation.forEach(x=>{
+            myTime = [...myTime, ...JSON.parse(x.time)]
+        })
+        othersReservation.forEach(x=>{
+            othersTime = [...othersTime, ...JSON.parse(x.time)]
+        })
+        res.status(200).json({userId: req.user.id, robotId: req.body.robotId, date: req.body.date, myTime, othersTime})
+    }
+    catch(err) {
+        console.log(err)
+        res.status(400).json({err: String(err)})
+    }
 });
 
 
