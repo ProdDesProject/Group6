@@ -118,7 +118,7 @@ class UserManagement extends Component {
                     <td>{userList.id}</td>
                     <td>{userList.name}</td>
                     <td>{userList.email}</td>
-                    <td>{userList.role}</td>
+                    <td>{userList.classname==="admin"?"admin":"student"}</td>
                     <td>{userList.classname}</td>
                     <td>
                         <button className="deleteRes" onClick={() => {
@@ -142,7 +142,6 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
-                {this.state.loading ? <LoadingScreen /> : null}
                 <div className="container2" style={{ height: "100%" }}>
                     <h1 id='title'>User Management</h1>
                     <button className="blueBtn" style={{ marginBottom: "5%" }}
@@ -181,6 +180,7 @@ class UserManagement extends Component {
                     {this.state.setAdd ? this.showAdd({user: null, action: "add"}) : null}
                     {this.state.setEdit ? this.showAdd({user: this.state.lastEdited, action: "edit"}) : null}
                 </div>
+                {this.state.loading ? <LoadingScreen /> : null}
             </div>
         )
 

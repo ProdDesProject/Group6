@@ -1,5 +1,4 @@
 import React from "react";
-import users from "../users";
 import { useFormik } from "formik";
 import Axios from "axios";
 import domain from "../domain"
@@ -12,12 +11,6 @@ const validateRobotData = userData => {
 
     } else if (userData.name.length > 20) {
         errors.name = 'Name cannot exceed 20 characters';
-    }
-    if (!userData.id) {
-        errors.id = "User must have an id";
-
-    } else if (users.find(x => x["id"] === userData.id)) {
-        errors.id = "User with this id already exists";
     }
     if (!userData.email) {
         errors.email = "User's email is missing";
@@ -33,47 +26,54 @@ const AddUser = (props) => {
     const user = props.user;
     const formik = useFormik({
         initialValues: {
-            id: (props.action==="edit" ? user.id : ""),
-            name: (props.action==="edit" ? user.name : ""),
-            email: (props.action==="edit" ? user.email : ""),
-            password: (props.action==="edit" ? user.password : ""),
-            class: (props.action==="edit" ? user.class : "")
+            id: (props.action === "edit" ? user.id : ""),
+            name: (props.action === "edit" ? user.name : ""),
+            email: (props.action === "edit" ? user.email : ""),
+            password: (props.action === "edit" ? user.password : ""),
+            class: (props.action === "edit" ? user.class : "")
         },
         validate: validateRobotData,
         onSubmit: values => {
-            if (props.action==="edit") {
-                //props.hideAdd({loading: true})
-                
-            }
-            if (props.action==="add") {
-                props.hideAdd({loading: true})
-                Axios.post(domain+"/users/add",{
+            if (props.action === "edit") {
+                props.hideAdd({ loading: true })
+                Axios.put(domain + "/users/update/" + values.id, {
                     name: values.name,
                     password: values.password,
                     email: values.email,
                     classname: values.class
-                }).then(response=>{
-                    props.hideAdd({loading: false, fetchSuccess: true});
-                }).catch(err=>{
-                    window.alert("Error\n"+err)
+                }).then(response => {
+                    props.hideAdd({ loading: false, fetchSuccess: true });
+                }).catch(err => {
+                    window.alert("Error\n" + err)
                 })
             }
-            users.push(values);
+            if (props.action === "add") {
+                props.hideAdd({ loading: true })
+                Axios.post(domain + "/users/add", {
+                    name: values.name,
+                    password: values.password,
+                    email: values.email,
+                    classname: values.class
+                }).then(response => {
+                    props.hideAdd({ loading: false, fetchSuccess: true });
+                }).catch(err => {
+                    window.alert("Error\n" + err)
+                })
+            }
         }
     });
 
     return (
         <form onSubmit={formik.handleSubmit} className="addRobotForm" style={{ color: "white" }}>
-            <h4>{(props.action==="edit" ? "Edit:" : "Add a new user:")}</h4><br />
-            <p>
-                <label htmlFor="id">User id:</label>
-                <input
-                    type="text" name="id" id="id" value={formik.values.id}
-                    onChange={formik.handleChange} onBlur={formik.handleBlur}>
-                </input>
-
-                {formik.touched.id && formik.errors.id ? <span style={{ color: 'red' }}>{formik.errors.id}</span> : <br />}
-            </p>
+            <h4>{(props.action === "edit" ? "Edit:" : "Add a new user:")}</h4><br />
+            {props.action === "edit" ? <>
+                <p>
+                    <label htmlFor="id">User id:</label>
+                    <input
+                        type="text" name="id" id="id" value={formik.values.id}
+                        onChange={formik.handleChange} onBlur={formik.handleBlur} disabled>
+                    </input>
+                </p><br /></> : null}
             <p>
                 <label htmlFor="name">Name and surname:</label>
                 <input
@@ -108,7 +108,7 @@ const AddUser = (props) => {
                     onChange={formik.handleChange} onBlur={formik.handleBlur}>
                 </input><br />
             </p>
-            <button type="submit" className="blueBtn" style={{ width: '48%', backgroundColor: "#092768" }}>{(props.action==="edit" ? "Update" : "Add")}</button>&nbsp;
+            <button type="submit" className="blueBtn" style={{ width: '48%', backgroundColor: "#092768" }}>{(props.action === "edit" ? "Update" : "Add")}</button>&nbsp;
             <button onClick={props.hideAdd} className="calcelAdd" style={{ width: '48%' }}>Cancel</button>
         </form>
     )
