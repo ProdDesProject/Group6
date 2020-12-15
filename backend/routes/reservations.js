@@ -117,6 +117,19 @@ router.get('/robots/:robotId&:date', jwtAuth, async(req,res) => {
         })*/
 });
 
+//user time booking API
+//localhost:3000/reservations/booking
+
+router.post('/booking', jwtAuth, async (req,res) => {
+    var reservation = await Reservation.forge({
+            userId: req.user.id,
+            robotId: req.body.robotId,
+            date: req.body.date,
+            time: req.body.time
+    }).save().catch(err => res.sendStatus(400));
+    res.status(200).json(reservation);
+  }) 
+  
 
 /*
 // delete reservation by user_id
