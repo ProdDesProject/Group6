@@ -3,7 +3,6 @@
 const bookshelf = require('../config/bookshelf-instance');
 const Promise = require('bluebird');
 const bcrypt = Promise.promisifyAll(require('bcryptjs'));
-const Role = require('./role');
 const Reservation = require('./reservation');
 const securityConfig = require('../config/security-config');
 const cascadeDelete = require('bookshelf-cascade-delete');
@@ -12,9 +11,6 @@ bookshelf.plugin(cascadeDelete);
 
 const User = bookshelf.model('User', {
     tableName: 'users',
-    roles() {
-        return this.belongsToMany(Role, 'user_role');
-    },
     reservations() {
         return this.hasMany(Reservation, 'userId', 'id');
     },
