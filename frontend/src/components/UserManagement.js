@@ -19,10 +19,12 @@ class UserManagement extends Component {
             lastEdited: 0,
             emailFilter: "",
             idFilter: "",
-            nameFilter: ""
+            nameFilter: "",
+            loading: false
         }
 
         this.inputChange = this.inputChange.bind(this)
+        this.renderTableData = this.renderTableData.bind(this)
     };
 
     componentDidMount() {
@@ -69,8 +71,16 @@ class UserManagement extends Component {
     //Deletes a user
 
     deleteUser = async (id) => {
-        let data = api.delete(`/delete/${id}`)
-        this.getUsers();
+        this.setState({loading: true})
+        let data = api.delete(`/delete/${id}`).then(response=>{
+            if (response.status===200) {
+                console.log("Delete success")
+                this.getUsers();
+            }
+        }).catch(err=>{
+            window.alert("Delete failed \n "+err.err)
+            console.log(err.err)
+        })
     }
 
     /*

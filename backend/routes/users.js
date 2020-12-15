@@ -44,7 +44,7 @@ router.post("/add", async (req,res) => {
 
 router.delete('/delete/:id', async (req,res) => {
   var user = await User.where('id', req.params.id)
-      .destroy().catch(err => res.sendStatus(400));
+      .destroy().catch(err => res.status(400).json({err: String( err)}));
       res.status(200).json(user);
 });
 

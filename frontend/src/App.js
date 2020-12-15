@@ -17,8 +17,8 @@ export default class App extends Component {
     super(props);
     this.state = {
       example_state: "example state string",
-      isLogin: true,
-      isAdmin: true,
+      isLogin: false,
+      isAdmin: false,
       userId: null,
       token: ""
     }
