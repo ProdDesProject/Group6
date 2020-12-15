@@ -10,8 +10,9 @@ const User = require('../models/user');
 
 //get localhost:3000/users
 router.get('/', async(req,res) => {
-  var user = await new User().fetchAll();
-  res.json(user);
+  var user = await new User().fetchAll()
+  .catch(err => res.sendStatus(400));
+  res.status(200).json(user);
   
 });
 
@@ -32,9 +33,20 @@ router.post("/add", async (req,res) => {
     email: req.body.email,
     password: req.body.password,
     classname: req.body.classname
-  }).save();
-  res.json(user);
+  }).save().catch(err => res.sendStatus(400));
+  res.status(200).json(user);
 });
+
+//update
+router.put('/update/:id', async (req, res) => {
+  var user = await User.where('id', req.params.id)
+  .save({ ...req.body },
+      { patch: true }
+      ).catch(err => res.sendStatus(400));
+      res.status(200).json(user);
+});
+
+
 
 /* router.delete('/delete/:userId', async (res,req) => {
   const userId = Number(req.params.userId);
@@ -70,7 +82,7 @@ router.get('/user_reservation/:id', async (req,res) => {
 //User time booking API
 // 
 
-/* router.post('/booking', jwtAuth, async (req,res) => {
+ router.post('/booking', jwtAuth, async (req,res) => {
   var reservation = await Reservation.forge({
       userId: req.user.id,
       robotId: req.user.robotId,
@@ -78,7 +90,7 @@ router.get('/user_reservation/:id', async (req,res) => {
       time: req.user.time
   }).save().catch(err => res.sendStatus(400));
   res.status(200).json(reservation);
-}) */
+}) 
 
 
 
