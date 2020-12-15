@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
 // GET http://localhost:3000/robots/{interger}
 router.get('/:id', (req, res) => {
     Robot.query()
-        .findById(req.params.id)
+        .where('id', req.params.id)
         .then(robots => {
           res.status(200).json(robots)
         }).catch(err => res.sendStatus(400));
