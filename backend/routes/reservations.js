@@ -58,9 +58,23 @@ router.get('/:id', (req, res) => {
 // get reservation by userId
 // GET baseurl/reservations/userId/{id} 
 router.get('/userId/:userId', async (req, res) => {
-    var user = await User.where('id', req.params.userId).fetch({
-    withRelated: ["reservations"]}).catch(err => res.sendStatus(400));
-    res.status(200).json(user.related("reservations"));
+    try {
+        let robots = await Robot.query().then().catch(err => res.sendStatus(400));
+        let reservations = await knex.select("*").from("reservations").where("userId", req.params.userId)
+        reservations.forEach(x => {
+            robots.forEach(y => {
+                if (x.robotId == y.id) {
+                    x.robotname = y.name
+                }
+            })
+        });
+        res.status(200).json(reservations);
+    }
+    catch {
+        res.sendStatus(400)
+    }
+    
+    
   });
 
 // get reservation by robotId
