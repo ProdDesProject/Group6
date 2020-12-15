@@ -295,7 +295,6 @@ hr.new2 {
 .addRobot{
   position: fixed;
   width: 50%;
-  z-index: 9;
   background-color: #367091;
   opacity: 0.97;
   font-size: 15px;
