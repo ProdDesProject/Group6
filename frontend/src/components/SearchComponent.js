@@ -1,21 +1,45 @@
 import React, { Component } from "react";
-import robotsinfo from "../robotsInfo"
 import RobotCard from "./RobotCard";
+import domain from "../domain";
 import Select from "react-select";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RobotInfo from "./RobotInfoCard";
 import AddRobot from "./AddRobot";
 import { Link } from 'react-router-dom'
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: domain + "/robots"
+});
 
 class SearchComponent extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { value: '', label: '', showInfo: false, showAdd: false, showInfoId: 0, lastDeleted: "", lastEdited: "" }
+    this.state = {
+      robotsinfo: [],
+      value: '',
+      label: '',
+      showInfo: false,
+      showAdd: false,
+      showInfoId: 0,
+      lastEdited: "",
+      options: {}
+    }
 
-    this.options = [];
+    this.mapRobotTypes = this.mapRobotTypes.bind(this);
 
+  }
+
+  componentDidMount() {
+    this.getRobots();
+  }
+
+  getRobots = async () => {
+    let data = await api.get("/").then(({ data }) =>
+      data);
+    this.setState({ robotsinfo: data });
     this.addInOptions();
   }
 
@@ -28,31 +52,29 @@ class SearchComponent extends Component {
   };
 
 
-  //creates array of robot types with unique values
+  //creates set of unique robot types
 
-  mapAllTypes = [...new Set(robotsinfo.map(function (robot) {
-    return robot.type
-  }))];
+  mapRobotTypes() {
+    let mapAllTypes = [...new Set(this.state.robotsinfo.map(robot => robot.type))];
+    return mapAllTypes
+  }
 
   //add the robot types in the options array
 
   addInOptions = () => {
+    let mapAllTypes = this.mapRobotTypes();
 
-    this.options.push({ value: "", label: "show all" });
-
-    for (let i = 0; i < this.mapAllTypes.length; i++) {
-      var e = this.mapAllTypes[i];
-      this.options.push({ value: e, label: e });
+    let optionsArray = [{ value: "", label: "show all" }]
+    for (let i = 0; i < mapAllTypes.length; i++) {
+      optionsArray[i + 1] = {};
+      optionsArray[i + 1].value = mapAllTypes[i];
+      optionsArray[i + 1].label = mapAllTypes[i];
     }
+    this.setState({ options: optionsArray });
+    console.log(mapAllTypes)
   }
 
-  // Info, edit and delete, currently avaliable buttons. Edit and delete buttons are shown only when user is an admin.
-
-  avaliableBtn = (id) => {
-    return (
-      <span title="avaliable within this hour"><button className="avaliableRes"><i className="far fa-check-circle" style={{ color: "white" }}></i></button></span>
-    );
-  }
+  // Info, edit and delete. Edit and delete buttons are shown only when user is an admin.
 
   infoBtn = (id) => {
     return (
@@ -67,7 +89,7 @@ class SearchComponent extends Component {
   }
 
   deleteBtn = (id) => {
-    const robot = robotsinfo.find(x => x.id === id);
+    const robot = this.state.robotsinfo.find(x => x.id === id);
     return (
       <button className="deleteRes" onClick={() => {
         var message = `Are you sure to delete ${robot.name}?`
@@ -83,7 +105,6 @@ class SearchComponent extends Component {
     return (
       <div>
         {this.infoBtn(id)}&nbsp;
-        {!this.props.admin && this.avaliableBtn(id)}&nbsp;
         {this.props.admin && this.editBtn(id)}&nbsp;
         {this.props.admin && this.deleteBtn(id)}
       </div>
@@ -93,19 +114,21 @@ class SearchComponent extends Component {
   //Functions for delete, edit robot and show information about robot
 
   deleteRobot(id) {
-    const deleteRobot = robotsinfo.findIndex(function (i) {
-      return i.id === id;
-    })
-    robotsinfo.splice(deleteRobot, 1);
-    this.setState({ lastDeleted: deleteRobot });
+
+    let data = api
+      .get(`/delete/${id}`)
+      .catch(err => console.log(err));
+    console.log(data);
+    this.getRobots();
+
   }
 
   showInfo = () => {
-    var r = robotsinfo.find(x => x.id === this.state["showInfoId"]);
+    var r = this.state.robotsinfo.find(x => x.id === this.state["showInfoId"]);
     return (
       <div className="infoBac">
         <div className="infoRobotCard">
-          <RobotInfo robotImage={r.imgURL} robotName={r.name} robotDescription={r.description} hideInfo={this.hideInfo} />
+          <RobotInfo robotImage={r.url} robotName={r.name} robotDescription={r.description} hideInfo={this.hideInfo} />
         </div>
       </div>
     );
@@ -130,10 +153,10 @@ class SearchComponent extends Component {
   searchByType = (e) => {
     return (
       <div className="row searchrow">
-        {robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
+        {this.state.robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
           <div className="col-md-4" key={filteredRobot.id}>
-            {!this.props.admin && <Link to={`/user/reservation/${filteredRobot.id}`}><RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} /></Link>}
-            {this.props.admin && <RobotCard key={filteredRobot.id} name={filteredRobot.name} imgURL={filteredRobot.imgURL} />}
+            {!this.props.admin && <Link to={`/user/reservation/${filteredRobot.id}`}><RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} /></Link>}
+            {this.props.admin && <RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} />}
             {this.showButtons(filteredRobot.id)}
           </div>
         ))}
@@ -146,10 +169,10 @@ class SearchComponent extends Component {
   showAll = () => {
     return (
       <div className="row searchrow">
-        {robotsinfo.map(robot => (
+        {this.state.robotsinfo.map(robot => (
           <div className="col-md-4" key={robot.id}>
-            {!this.props.admin && <Link to={`/user/reservation/${robot.id}`}><RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} /></Link>}
-            {this.props.admin && <RobotCard key={robot.id} name={robot.name} imgURL={robot.imgURL} />}
+            {!this.props.admin && <Link to={`/user/reservation/${robot.id}`}><RobotCard key={robot.id} name={robot.name} url={robot.url} /></Link>}
+            {this.props.admin && <RobotCard key={robot.id} name={robot.name} url={robot.url} />}
             {this.showButtons(robot.id)}
           </div>
         ))}
@@ -165,7 +188,7 @@ class SearchComponent extends Component {
           <Select
             className="searchbar"
             placeholder="Select Type"
-            options={this.options}
+            options={this.state.options}
             defaultValue={{ value: '', label: '' }}
             onChange={(e) => {
               this.setState({
