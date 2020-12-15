@@ -149,7 +149,7 @@ export default class AdminReservationManagement extends Component {
         return (
             <>
                 {this.state.loading ? <LoadingScreen /> : null}
-                <div className="container container2" style={{ height: "100vh" }}>
+                <div className="container container2" style={{ height: "100%" }}>
                     <h1 id='title'>Reservation management</h1>
                     <div className="m-5 filterRes">
                         <b className="p-2">Filter</b>
@@ -196,7 +196,7 @@ export default class AdminReservationManagement extends Component {
 }
 
 const convertDate = (str) => {
-    let normalDate = str.substring(8,10) + "/" +  str.substring(5,7) + "/" + str.substring(0,4);
+    let normalDate = str.substring(8, 10) + "/" + str.substring(5, 7) + "/" + str.substring(0, 4);
     return normalDate;
 }
 

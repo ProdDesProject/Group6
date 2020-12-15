@@ -1,6 +1,11 @@
-import users from "../users"
+import domain from "../domain";
 import React, { Component } from "react";
 import AddUser from "./AddUser";
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: domain + "/users"
+});
 
 class UserManagement extends Component {
 
@@ -8,16 +13,28 @@ class UserManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            users: [],
             setAdd: false,
-            lastDeleted: 0,
             setEdit: false,
             lastEdited: 0,
             emailFilter: "",
             idFilter: "",
             nameFilter: ""
         }
-        this.inputChange = this.inputChange.bind(this)
 
+        this.inputChange = this.inputChange.bind(this)
+    };
+
+    componentDidMount() {
+        this.getUsers();
+    }
+
+    //get users
+    getUsers = async () => {
+        let data = await api.get("/").then(({ data }) =>
+            data);
+        this.setState({ users: data });
+        console.log(this.state.users)
     }
 
     inputChange = (e) => {
@@ -29,7 +46,6 @@ class UserManagement extends Component {
             <td>userid</td>
             <td>name and surname</td>
             <td>email</td>
-            <td>password</td>
             <td>role</td>
             <td>class</td>
             <td>actions</td>
@@ -50,14 +66,11 @@ class UserManagement extends Component {
 
     hideAdd = () => this.setState({ setAdd: false, setEdit: false });
 
-    //finds user by id and then deletes it
+    //Deletes a user
 
-    deleteUser = (id) => {
-        const deleteUser = users.findIndex(function (i) {
-            return i.id === id;
-        })
-        users.splice(deleteUser, 1);
-        this.setState({ lastDeleted: deleteUser });
+    deleteUser = async (id) => {
+        let data = api.delete(`/delete/${id}`)
+        this.getUsers();
     }
 
     /*
@@ -68,12 +81,12 @@ class UserManagement extends Component {
     */
 
     renderTableData = (props) => {
-        let data = users;
+        let data = this.state.users;
         let filtered;
         filtered = data.filter(i => {
-            return i.email.toLowerCase().includes(props.email.toLowerCase())
-                && i.id.toLowerCase().includes(props.id.toLowerCase())
-                && i.name.toLowerCase().includes(props.name.toLowerCase())
+            return i.email.toString().toLowerCase().includes(props.email.toLowerCase())
+                && i.id.toString().toLowerCase().includes(props.id.toLowerCase())
+                && i.name.toString().toLowerCase().includes(props.name.toLowerCase())
         })
         return filtered.map((userList) => {
             return (
@@ -81,9 +94,8 @@ class UserManagement extends Component {
                     <td>{userList.id}</td>
                     <td>{userList.name}</td>
                     <td>{userList.email}</td>
-                    <td>{userList.password}</td>
                     <td>{userList.role}</td>
-                    <td>{userList.class}</td>
+                    <td>{userList.classname}</td>
                     <td>
                         <button className="deleteRes" onClick={() => {
                             var message = `Are you sure you want to delete user ${userList.name} ?`
@@ -106,13 +118,13 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
-                <div className="container2" style={{ height: "100vh" }}>
+                <div className="container2" style={{ height: "100%" }}>
                     <h1 id='title'>User Management</h1>
                     <button className="blueBtn" style={{ marginBottom: "5%" }}
                         onClick={() => { this.setState({ setAdd: true }) }}>Add a new user</button>
                     <div className="filterRes">
                         <b className="p-2">Filter results:</b>
-                        <table>
+                        <table className="titleseparate">
                             <tbody>
                                 <tr >
                                     <td className="p-2 ">User's id:</td>
