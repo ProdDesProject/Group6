@@ -134,7 +134,8 @@ router.post('/robot-schedule', jwtAuth, async(req,res) => {
         res.status(200).json({userId: req.user.id, robotId: req.body.robotId, date: req.body.date, myTime, othersTime})
     }
     catch(err) {
-        res.status(400).json(err)
+        console.log(err)
+        res.status(400).json({err: String(err)})
     }
 });
 

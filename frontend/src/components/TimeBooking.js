@@ -97,7 +97,6 @@ export default class Reservation extends Component {
             }
         )
             .then((response) => {
-                this.setState({ loading: false })
                 console.log(response.data)
                 let data = response.data
                 if (response.status === 200) {
@@ -106,6 +105,7 @@ export default class Reservation extends Component {
             })
             .catch((response) => {
                 this.setState({ loading: false })
+                window.alert("Error")
                 console.log("Error!")
             });
         // let busy = stubData.busy.map(x => parseInt(x.slice(10)))
@@ -137,8 +137,12 @@ export default class Reservation extends Component {
                 })
                 .catch((response) => {
                     this.setState({ loading: false })
+                    window.alert("Error")
                     console.log("Error!")
                 });
+        }
+        if (prevState.reserve!==this.state.reserve) {
+            console.log({reserve: this.state.reserve})
         }
     }
     selectDate(e) {
@@ -154,7 +158,58 @@ export default class Reservation extends Component {
             this.setState({ reserve: [...this.state.reserve, i] })
     }
     handleSubmit() {
-        //console.log(this.state.busy)
+        this.setState({ loading: true })
+        Axios.post(domain + "/reservations/add_new",
+            {
+                date: this.state.date.toISOString().substring(0, 10),
+                robotId: this.state.robotId,
+                time: String("["+this.state.reserve+"]")
+            },
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': this.props.token
+                }
+            }
+        )
+            .then((response) => {
+                console.log(response)
+                let data = response.data
+                if (response.status === 200) {
+                    // Fetch data if reservation creatation success
+                    Axios.post(domain + "/reservations/robot-schedule",
+                        {
+                            date: this.state.date.toISOString().substring(0, 10),
+                            robotId: this.state.robotId
+                        },
+                        {
+                            headers: {
+                                'Content-type': 'application/json',
+                                'Accept': 'application/json',
+                                'Authorization': this.props.token
+                            }
+                        }
+                    )
+                        .then((response) => {
+                            console.log(response.data)
+                            let data = response.data
+                            if (response.status === 200) {
+                                this.setState({ owned: data.myTime, busy: data.othersTime, loading: false, reserve: [] })
+                            }
+                        })
+                        .catch((response) => {
+                            this.setState({ loading: false })
+                            window.alert("Error")
+                            console.log("Error!")
+                        });
+                }
+            })
+            .catch((response) => {
+                this.setState({ loading: false })
+                window.alert("Error")
+                console.log("Error!")
+            });
     }
     render() {
         let pass = (({ busy, owned, reserve }) => ({ busy, owned, reserve }))(this.state);
@@ -165,7 +220,7 @@ export default class Reservation extends Component {
 
                         <h3 className="chooseTimeTable">Book time</h3>
                         <div className="row my-4 chooseTimeTable">
-                            <table style={{textAlign: "left", borderSpacing: "20px", borderCollapse: "separate"}}>
+                            <table style={{ textAlign: "left", borderSpacing: "20px", borderCollapse: "separate" }}>
                                 <tbody>
                                     <tr>
                                         <td>Robot name:</td>
