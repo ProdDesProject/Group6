@@ -55,17 +55,32 @@ class UserManagement extends Component {
 
     //shows add user form
 
-    showAdd = (id) => {
+    showAdd = ({user, action}) => {
         return (
             <div className="addRobot">
-                <AddUser hideAdd={this.hideAdd} id={id} />
+                <AddUser hideAdd={this.hideAdd} user={user} action={action} />
             </div>
         );
     };
 
     //hides add user form 
 
-    hideAdd = () => this.setState({ setAdd: false, setEdit: false });
+    hideAdd = ({loading, fetchSuccess}) => {
+        if (loading) {
+            this.setState({loading: true})
+        }
+        else if (fetchSuccess) {
+            axios.get(domain+"/users").then(res=>{
+                if (res.status===200) {
+                    console.log("fetch success");
+                    this.setState({ setAdd: false, setEdit: false, loading: false, users: res.data})
+                }
+            })
+        }
+        else {
+            this.setState({ setAdd: false, setEdit: false})
+        }
+    };
 
     //Deletes a user
 
@@ -114,7 +129,7 @@ class UserManagement extends Component {
                             <i className="far fa-trash-alt" style={{ color: "white" }}></i>
                         </button>&nbsp;
                             <button className="editRes" onClick={() => {
-                            this.setState({ setEdit: true, lastEdited: userList.id });
+                            this.setState({ setEdit: true, lastEdited: userList });
                         }}>
                             <i className="fas fa-pencil-alt" style={{ color: "white" }}></i>
                         </button>
@@ -163,8 +178,8 @@ class UserManagement extends Component {
                             )}
                         </tbody>
                     </table>
-                    {this.state.setAdd ? this.showAdd("") : null}
-                    {this.state.setEdit ? this.showAdd(this.state.lastEdited) : null}
+                    {this.state.setAdd ? this.showAdd({user: null, action: "add"}) : null}
+                    {this.state.setEdit ? this.showAdd({user: this.state.lastEdited, action: "edit"}) : null}
                 </div>
             </div>
         )
