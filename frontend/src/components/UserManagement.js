@@ -2,6 +2,7 @@ import domain from "../domain";
 import React, { Component } from "react";
 import AddUser from "./AddUser";
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 const api = axios.create({
     baseURL: domain + "/users"
@@ -33,10 +34,8 @@ class UserManagement extends Component {
 
     //get users
     getUsers = async () => {
-        let data = await api.get("/").then(({ data }) =>
-            data);
-        this.setState({ users: data });
-        console.log(this.state.users)
+        this.setState({ loading: true })
+        let data = api.get("/").then(({ data }) => { this.setState({ users: data, loading: false }); })
     }
 
     inputChange = (e) => {
@@ -71,14 +70,14 @@ class UserManagement extends Component {
     //Deletes a user
 
     deleteUser = async (id) => {
-        this.setState({loading: true})
-        let data = api.delete(`/delete/${id}`).then(response=>{
-            if (response.status===200) {
+        this.setState({ loading: true })
+        let data = api.delete(`/delete/${id}`).then(response => {
+            if (response.status === 200) {
                 console.log("Delete success")
                 this.getUsers();
             }
-        }).catch(err=>{
-            window.alert("Delete failed \n "+err.err)
+        }).catch(err => {
+            window.alert("Delete failed \n " + err.err)
             console.log(err.err)
         })
     }
@@ -128,6 +127,7 @@ class UserManagement extends Component {
     render() {
         return (
             <div>
+                {this.state.loading ? <LoadingScreen /> : null}
                 <div className="container2" style={{ height: "100%" }}>
                     <h1 id='title'>User Management</h1>
                     <button className="blueBtn" style={{ marginBottom: "5%" }}
