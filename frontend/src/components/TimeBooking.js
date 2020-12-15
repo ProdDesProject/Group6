@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import DatePicker from "react-datepicker";
+import Axios from "axios";
+import domain from "../domain"
 import LoadingScreen from "./LoadingScreen";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "../CSS/Reservation.module.css";
@@ -11,7 +13,7 @@ const Calendar = (props) => {
             selected={props.date}
             onSelect={props.selectDate}
             dateFormat="dd-MM-yyyy"
-            minDate={new Date()}
+        //minDate={new Date()}
         />
     );
 };
@@ -62,6 +64,7 @@ const stubData = {
     busy: ["03-12-2020 1", "03-12-2020 2", "03-12-2020 3"],
     owned: ["03-12-2020 8", "03-12-2020 9", "03-12-2020 10"]
 }
+
 export default class Reservation extends Component {
     constructor(props) {
         super(props);
@@ -70,15 +73,73 @@ export default class Reservation extends Component {
             busy: [1, 8, 23],
             owned: [5, 6],
             reserve: [],
-            loading: false
+            loading: false,
+            robotId: 3,
+            robotname: "Robot3",
+            robotType: "Cleaning"
         }
         this.selectDate = this.selectDate.bind(this);
         this.handleTimeSelect = this.handleTimeSelect.bind(this)
     }
     componentDidMount() {
-        let busy = stubData.busy.map(x => parseInt(x.slice(10)))
-        let owned = stubData.owned.map(x => parseInt(x.slice(11)))
-        this.setState({ busy: busy, owned: owned })
+        this.setState({ loading: true })
+        Axios.post(domain + "/reservations/robot-schedule",
+            {
+                date: this.state.date.toISOString().substring(0, 10),
+                robotId: this.state.robotId
+            },
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': this.props.token
+                }
+            }
+        )
+            .then((response) => {
+                this.setState({ loading: false })
+                console.log(response.data)
+                let data = response.data
+                if (response.status === 200) {
+                    this.setState({ owned: data.myTime, busy: data.othersTime, loading: false })
+                }
+            })
+            .catch((response) => {
+                this.setState({ loading: false })
+                console.log("Error!")
+            });
+        // let busy = stubData.busy.map(x => parseInt(x.slice(10)))
+        // let owned = stubData.owned.map(x => parseInt(x.slice(11)))
+        // this.setState({ busy: busy, owned: owned })
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.date !== this.state.date) {
+            this.setState({ loading: true })
+            Axios.post(domain + "/reservations/robot-schedule",
+                {
+                    date: this.state.date.toISOString().substring(0, 10),
+                    robotId: this.state.robotId
+                },
+                {
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': this.props.token
+                    }
+                }
+            )
+                .then((response) => {
+                    console.log(response)
+                    let data = response.data
+                    if (response.status === 200) {
+                        this.setState({ owned: data.myTime, busy: data.othersTime, loading: false, reserve: [] })
+                    }
+                })
+                .catch((response) => {
+                    this.setState({ loading: false })
+                    console.log("Error!")
+                });
+        }
     }
     selectDate(e) {
         this.setState({ date: e })
@@ -102,9 +163,25 @@ export default class Reservation extends Component {
                 {this.state.loading === true ? <LoadingScreen /> : (
                     <div className="container mt-5 container2">
 
-                        <div className="row chooseTimeTable">
-                            <div className="px-3">Date:</div>
-                            <Calendar selectDate={this.selectDate} date={this.state.date} />
+                        <h3 className="chooseTimeTable">Book time</h3>
+                        <div className="row my-4 chooseTimeTable">
+                            <table style={{textAlign: "left", borderSpacing: "20px", borderCollapse: "separate"}}>
+                                <tbody>
+                                    <tr>
+                                        <td>Robot name:</td>
+                                        <td>{this.state.robotname}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Robot type:</td>
+                                        <td>{this.state.robotType}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Date:</td>
+                                        <td><Calendar selectDate={this.selectDate} date={this.state.date} /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </div>
                         <div className="my-4 chooseTimeTable">
                             <RenderButton min={0} max={6} {...pass} handleTimeSelect={this.handleTimeSelect} />
