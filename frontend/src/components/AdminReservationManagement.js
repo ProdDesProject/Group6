@@ -30,8 +30,6 @@ function renderTableData(props) {
     let data = props.data;
     let dateFilter = props.dateFilter;
     let filtered;
-    console.log(data)
-    /*
     if (dateFilter instanceof Date) {
         let date = new Date(dateFilter.getTime() + Math.abs(dateFilter.getTimezoneOffset() * 60000))
         filtered = data.filter(i => {
@@ -61,7 +59,7 @@ function renderTableData(props) {
                 </td>
             </tr>
         )
-    })*/
+    })
 }
 
 export default class AdminReservationManagement extends Component {
