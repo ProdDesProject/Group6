@@ -55,7 +55,7 @@ class UserManagement extends Component {
 
     //shows add user form
 
-    showAdd = ({user, action}) => {
+    showAdd = ({ user, action }) => {
         return (
             <div className="addRobot">
                 <AddUser hideAdd={this.hideAdd} user={user} action={action} />
@@ -65,20 +65,20 @@ class UserManagement extends Component {
 
     //hides add user form 
 
-    hideAdd = ({loading, fetchSuccess}) => {
+    hideAdd = ({ loading, fetchSuccess }) => {
         if (loading) {
-            this.setState({loading: true})
+            this.setState({ loading: true })
         }
         else if (fetchSuccess) {
-            axios.get(domain+"/users").then(res=>{
-                if (res.status===200) {
+            axios.get(domain + "/users").then(res => {
+                if (res.status === 200) {
                     console.log("fetch success");
-                    this.setState({ setAdd: false, setEdit: false, loading: false, users: res.data})
+                    this.setState({ setAdd: false, setEdit: false, loading: false, users: res.data })
                 }
             })
         }
         else {
-            this.setState({ setAdd: false, setEdit: false})
+            this.setState({ setAdd: false, setEdit: false })
         }
     };
 
@@ -107,6 +107,7 @@ class UserManagement extends Component {
     renderTableData = (props) => {
         let data = this.state.users;
         let filtered;
+        console.log(data);
         filtered = data.filter(i => {
             return i.email.toString().toLowerCase().includes(props.email.toLowerCase())
                 && i.id.toString().toLowerCase().includes(props.id.toLowerCase())
@@ -118,7 +119,7 @@ class UserManagement extends Component {
                     <td>{userList.id}</td>
                     <td>{userList.name}</td>
                     <td>{userList.email}</td>
-                    <td>{userList.classname==="admin"?"admin":"student"}</td>
+                    <td>{userList.classname === "admin" ? "admin" : "student"}</td>
                     <td>{userList.classname}</td>
                     <td>
                         <button className="deleteRes" onClick={() => {
@@ -177,8 +178,8 @@ class UserManagement extends Component {
                             )}
                         </tbody>
                     </table>
-                    {this.state.setAdd ? this.showAdd({user: null, action: "add"}) : null}
-                    {this.state.setEdit ? this.showAdd({user: this.state.lastEdited, action: "edit"}) : null}
+                    {this.state.setAdd ? this.showAdd({ user: null, action: "add" }) : null}
+                    {this.state.setEdit ? this.showAdd({ user: this.state.lastEdited, action: "edit" }) : null}
                 </div>
                 {this.state.loading ? <LoadingScreen /> : null}
             </div>
