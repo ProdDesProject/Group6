@@ -21,6 +21,7 @@ class SearchComponent extends Component {
     this.state = {
       robotsinfo: [],
       setEdit: false,
+      setAdd: false,
       value: '',
       label: '',
       showInfo: false,
@@ -32,6 +33,7 @@ class SearchComponent extends Component {
     }
 
     this.mapRobotTypes = this.mapRobotTypes.bind(this);
+    this.hideAdd = this.hideAdd.bind(this)
 
   }
 
@@ -39,11 +41,22 @@ class SearchComponent extends Component {
     this.getRobots();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.robotsinfo !== this.state.robotsinfo) {
+      this.addInOptions()
+    }
+  }
+
   getRobots = async () => {
-    let data = await api.get("/").then(({ data }) =>
-      data);
-    this.setState({ robotsinfo: data, loading: false });
-    this.addInOptions();
+    this.setState({ loading: true })
+    api.get("/").then(response => {
+      if (response.status === 200) {
+        console.log("fetch success")
+        this.setState({ robotsinfo: response.data, loading: false });
+      }
+    }).catch(err => {
+      window.alert("Error:\n" + err)
+    })
   }
 
   setInfoTrue = id => () => {
@@ -85,9 +98,9 @@ class SearchComponent extends Component {
     );
   }
 
-  editBtn = (id) => {
+  editBtn = ({ robot }) => {
     return (
-      <button className="editRes" onClick={this.editRobot(id)} ><i className="fas fa-pencil-alt" style={{ color: "white" }} ></i></button>
+      <button className="editRes" onClick={this.editRobot({ robot })} ><i className="fas fa-pencil-alt" style={{ color: "white" }} ></i></button>
     );
   }
 
@@ -104,12 +117,12 @@ class SearchComponent extends Component {
 
   //show all buttons
 
-  showButtons = (id) => {
+  showButtons = ({ robot }) => {
     return (
       <div>
-        {this.infoBtn(id)}&nbsp;
-        {this.props.admin && this.editBtn(id)}&nbsp;
-        {this.props.admin && this.deleteBtn(id)}
+        {this.infoBtn(robot.id)}&nbsp;
+        {this.props.admin && this.editBtn({ robot })}&nbsp;
+        {this.props.admin && this.deleteBtn(robot.id)}
       </div>
     );
   }
@@ -117,13 +130,17 @@ class SearchComponent extends Component {
   //Functions for delete, edit robot and show information about robot
 
   deleteRobot(id) {
-
-    let data = api
-      .delete(`/delete/${id}`)
-      .catch(err => console.log(err));
-    console.log(data);
-    this.getRobots();
-
+    api.delete(`/delete/${id}`)
+      .then(response => {
+        if (response.status === 200) {
+          console.log("Delete success")
+          this.getRobots();
+        }
+      })
+      .catch(err => {
+        window.alert("Error: \n" + err)
+        console.log(err)
+      });
   }
 
   showInfo = () => {
@@ -141,16 +158,8 @@ class SearchComponent extends Component {
   //here (and loading after adding)
 
 
-  editRobot = id => () => {
-    this.setState({ setEdit: true });
-    this.findObject(id);
-    console.log(this.state.lastEdited);
-  }
-
-  findObject = async (id) => {
-    await api.get(`/${id}`).then((data) => {
-      this.setState({ lastEdited: data.data[0] });
-    });
+  editRobot = ({ robot }) => () => {
+    this.setState({ setEdit: true, lastEdited: robot });
   }
 
   //
@@ -160,22 +169,25 @@ class SearchComponent extends Component {
       this.setState({ loading: true })
     }
     else if (fetchSuccess) {
-      axios.get(api).then(res => {
+      axios.get(domain + "/robots").then(res => {
         if (res.status === 200) {
           console.log("fetch success");
-          this.setState({ setEdit: false, loading: false })
+          this.setState({ setEdit: false, setAdd: false, loading: false, robotsinfo: res.data })
         }
       })
+        .catch(err => {
+          window.alert("Error\n" + err)
+        })
     }
     else {
-      this.setState({ setEdit: false })
+      this.setState({ setEdit: false, setAdd: false })
     }
   };
 
-  showAdd = ({ user, action }) => {
+  showAdd = ({ robot, action }) => {
     return (
       <div className="addRobot">
-        <AddRobot hideAdd={this.hideAdd} user={user} action={action} />
+        <AddRobot hideAdd={this.hideAdd} robot={robot} action={action} />
       </div>
     );
   };
@@ -185,9 +197,9 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {this.state.robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
           <div className="col-md-4" key={filteredRobot.id}>
-            {!this.props.admin && <Link to={{pathname:`/user/reservation`, robot: filteredRobot}}><RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} /></Link>}
+            {!this.props.admin && <Link to={{ pathname: `/user/reservation`, robot: filteredRobot }}><RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} /></Link>}
             {this.props.admin && <RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} />}
-            {this.showButtons(filteredRobot.id)}
+            {this.showButtons({ robot: filteredRobot })}
           </div>
         ))}
       </div>
@@ -201,9 +213,9 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {this.state.robotsinfo.map(robot => (
           <div className="col-md-4" key={robot.id}>
-            {!this.props.admin && <Link to={{pathname:`/user/reservation`, robot: robot}}><RobotCard key={robot.id} name={robot.name} url={robot.url} /></Link>}
+            {!this.props.admin && <Link to={{ pathname: `/user/reservation`, robot: robot }}><RobotCard key={robot.id} name={robot.name} url={robot.url} /></Link>}
             {this.props.admin && <RobotCard key={robot.id} name={robot.name} url={robot.url} />}
-            {this.showButtons(robot.id)}
+            {this.showButtons({ robot })}
           </div>
         ))}
       </div>
@@ -213,6 +225,7 @@ class SearchComponent extends Component {
   render() {
     return (
       <div>
+        {this.props.admin ? <button className="blueBtn" onClick={() => this.setState({ setAdd: true })}>Add new robot</button> : null}
         <div style={{ marginTop: "5%" }}>
           <h5>Select robot type: </h5>
           <Select
@@ -231,7 +244,8 @@ class SearchComponent extends Component {
         {this.state["value"] === '' && this.showAll()}
         {this.state["value"] !== '' && this.searchByType(this.state.value)}
         {this.state.showInfo ? this.showInfo() : null}
-        {this.state.setEdit ? this.showAdd({ user: this.state.lastEdited, action: "edit" }) : null}
+        {this.state.setEdit ? this.showAdd({ robot: this.state.lastEdited, action: "edit" }) : null}
+        {this.state.setAdd ? this.showAdd({ robot: null, action: "add" }) : null}
         {this.state.loading ? <LoadingScreen /> : null}
       </div>
     );

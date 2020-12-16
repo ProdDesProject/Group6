@@ -9,16 +9,16 @@ const validateRobotData = robotData => {
     if (!robotData.name) {
         errors.name = "Robot's name is missing";
 
-    } 
+    }
     if (!robotData.description) {
         errors.description = "Robot's description is missing";
-    } 
+    }
     if (!robotData.type) {
         errors.type = "Robot's type is missing";
-    } 
+    }
     if (!robotData.imgURL) {
         errors.imgURL = "Image's url  is missing"
-    } 
+    }
 
     return errors;
 }
@@ -45,22 +45,23 @@ const AddRobotComponent = (props) => {
             if (props.action === "edit") {
                 props.hideAdd({ loading: true })
                 Axios.put(domain + "/robots/update/" + values.id, {
-                    id: robot.id,
                     name: values.name,
                     url: values.imgURL,
                     description: values.description,
                     type: values.type
                 }).then(response => {
-                    props.hideAdd({ loading: false, fetchSuccess: true });
+                    if (response.status === 200) {
+                        console.log("Update success")
+                        props.hideAdd({ loading: false, fetchSuccess: true });
+                    }
                 }).catch(err => {
-                    window.alert("Error\n" + err)
+                    console.log("bugged")
+                    //window.alert("Error \n" + err)
                 })
             }
             if (props.action === "add") {
                 props.hideAdd({ loading: true })
-                values.id = now.getFullYear().toString() + now.getMonth().toString() + now.getDate() + now.getHours() + now.getMinutes() + now.getSeconds();
                 Axios.post(domain + "/robots/add", {
-                    id: values.id,
                     name: values.name,
                     url: values.imgURL,
                     description: values.description,
@@ -68,7 +69,7 @@ const AddRobotComponent = (props) => {
                 }).then(response => {
                     props.hideAdd({ loading: false, fetchSuccess: true });
                 }).catch(err => {
-                    window.alert("Error\n" + err)
+                    window.alert(err)
                 })
             }
         }
@@ -76,7 +77,7 @@ const AddRobotComponent = (props) => {
 
     return (
         <form onSubmit={formik.handleSubmit} className="addRobotForm">
-            <h4>{(props.id ? "Edit:" : "Add new robot:")}</h4><br />
+            <h4>{(props.action === "edit" ? "Edit:" : "Add new robot:")}</h4><br />
             <p>
                 <label htmlFor="name">Robot's name:</label>
                 <input
@@ -113,8 +114,8 @@ const AddRobotComponent = (props) => {
 
                 {formik.touched.description && formik.errors.description ? <span style={{ color: 'red' }}>{formik.errors.description}</span> : <br />}
             </p>
-            <button type="submit" className="blueBtn" style={{ width: '100%', backgroundColor: "#092768" }}>{(props.id ? "Update" : "Add")}</button>
-            <button onClick={props.hideAdd} className="calcelAdd" style={{ width: '100%' }}>Cancel</button>
+            <button type="submit" className="blueBtn" style={{ width: '100%', backgroundColor: "#092768" }}>{(props.action === "edit" ? "Update" : "Add")}</button>
+            <button type="button" onClick={props.hideAdd} className="calcelAdd" style={{ width: '100%' }}>Cancel</button>
         </form>
     )
 }
