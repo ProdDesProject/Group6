@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 //var robots = require('../models/robot_model');
 const Robot = require('../models/robot')
+const Reservation = require('../models/reservation')
 //const jwtAuth = require('../middleware/jwt-authenticate');
 
 // get robots reservations by id
@@ -90,8 +91,11 @@ router.put('/update/:id', async (req, res) => {
 
 
 // delete robots by id
-// DELETE http://localhost:3000/robots/{integer}
+
+// GET http://localhost:3000/robots/{integer}
 router.delete('/delete/:id', async (req, res) => {
+  var reservations = await Reservation.where('robotId', req.params.id)
+    .destroy().catch(err => res.sendStatus(400));
   var robot = await Robot.where('id', req.params.id)
     .destroy().catch(err => res.sendStatus(400));
   res.status(200).json(robot);
