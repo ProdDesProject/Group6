@@ -1,10 +1,10 @@
 exports.up = function(knex) {
     return knex.schema.createTable("robots", (table) => {
         table.increments('id').unsigned().primary();
-        table.string('name', 20);
-        table.string('type', 15);
-        table.string('url', 30);
-        table.string('description', 100)
+        table.string('name');
+        table.string('type');
+        table.string('url');
+        table.string('description')
       });  
 };
 
