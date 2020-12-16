@@ -55,15 +55,6 @@ const RenderButton = (props) => {
     return <div className="row">{result}</div>
 }
 
-const stubData = {
-    user: { idUser: 12 },
-    robot: {
-        idRobot: 1,
-        robotName: "robot 1"
-    },
-    busy: ["03-12-2020 1", "03-12-2020 2", "03-12-2020 3"],
-    owned: ["03-12-2020 8", "03-12-2020 9", "03-12-2020 10"]
-}
 
 export default class Reservation extends Component {
     constructor(props) {
@@ -74,14 +65,16 @@ export default class Reservation extends Component {
             owned: [5, 6],
             reserve: [],
             loading: false,
-            robotId: 3,
-            robotname: "Robot3",
-            robotType: "Cleaning"
+            robotId: this.props.location.robot.id,
+            robotname: this.props.location.robot.name,
+            robotType: this.props.location.robot.type,
+            robotDescription: this.props.location.robot.description
         }
         this.selectDate = this.selectDate.bind(this);
         this.handleTimeSelect = this.handleTimeSelect.bind(this)
     }
     componentDidMount() {
+        console.log(this.props.location.robot)
         this.setState({ loading: true })
         Axios.post(domain + "/reservations/robot-schedule",
             {
@@ -108,9 +101,6 @@ export default class Reservation extends Component {
                 window.alert("Error")
                 console.log("Error!")
             });
-        // let busy = stubData.busy.map(x => parseInt(x.slice(10)))
-        // let owned = stubData.owned.map(x => parseInt(x.slice(11)))
-        // this.setState({ busy: busy, owned: owned })
     }
     componentDidUpdate(prevProps, prevState) {
         if (prevState.date !== this.state.date) {
@@ -175,7 +165,6 @@ export default class Reservation extends Component {
         )
             .then((response) => {
                 console.log(response)
-                let data = response.data
                 if (response.status === 200) {
                     // Fetch data if reservation creatation success
                     Axios.post(domain + "/reservations/robot-schedule",
@@ -231,6 +220,10 @@ export default class Reservation extends Component {
                                         <td>{this.state.robotType}</td>
                                     </tr>
                                     <tr>
+                                        <td>Description:</td>
+                                        <td>{this.state.robotDescription}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Date:</td>
                                         <td><Calendar selectDate={this.selectDate} date={this.state.date} /></td>
                                     </tr>
@@ -252,7 +245,7 @@ export default class Reservation extends Component {
                             })}
                         </ul>
                         <div className="row chooseTimeTable">
-                            <button className="btn bg-white blueBtn" onClick={() => this.handleSubmit()}>Reserve</button>
+                            <button className="btn bg-white blueBtn" onClick={() => this.handleSubmit()} disabled={this.state.reserve.length===0?true:false}>Reserve</button>
                         </div>
                     </div>)}
 

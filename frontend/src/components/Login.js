@@ -10,10 +10,19 @@ export default class Login extends Component {
         this.state = {
             username: "",
             password: "",
-            loading: false
+            loading: false,
+            disable: true
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    componentDidUpdate(prevProps,prevState) {
+        if(prevState.username!==this.state.username||prevState.password!==this.state.password) {
+            if (this.state.username===""||this.state.password==="") {
+                this.setState({disable: true})
+            }
+            else (this.setState({disable: false}))
+        }
     }
     handleChange(event) {
         this.setState({ [event.target.name]: event.target.value })
@@ -40,20 +49,20 @@ export default class Login extends Component {
             }
         )
             .then((response) => {
-                this.setState({loading: false})
-                console.log(response.data)
+                console.log(response)
                 let data =  response.data
                 if (data.success===false) {
                     window.alert("Wrong username or password")
                 }
                 else if (data.success===true) {
                     console.log("login success")
-                    this.props.login({isLogin: data.success, isAdmin: data.adminStatus, userId: data.id, token: data.token})
+                    this.props.login({isLogin: data.success, isAdmin: data.adminStatus, userId: data.id, token: data.token, loading: false})
                 }
             })
             .catch((response) => {
                 this.setState({loading: false})
-                console.log("Error!")
+                window.alert("Wrong username or password")
+                console.log(response)
             });
         console.log("Login clicked")
     }
@@ -80,7 +89,7 @@ export default class Login extends Component {
                                     <label htmlFor="password">Password</label>
                                     <input type="password" className="form-control" name="password" onChange={this.handleChange} />
                                 </div>
-                                <button type="submit" className="btn btn-primary">Login</button>
+                                <button type="submit" className="btn btn-primary" disabled={this.state.disable}>Login</button>
                             </form>
                         </div>
                     </div>
