@@ -26,8 +26,9 @@ class SearchComponent extends Component {
       showInfo: false,
       showAdd: false,
       showInfoId: 0,
-      lastEdited: 0,
-      options: {}
+      lastEdited: {},
+      options: {},
+      loading: false
     }
 
     this.mapRobotTypes = this.mapRobotTypes.bind(this);
@@ -41,7 +42,7 @@ class SearchComponent extends Component {
   getRobots = async () => {
     let data = await api.get("/").then(({ data }) =>
       data);
-    this.setState({ robotsinfo: data });
+    this.setState({ robotsinfo: data, loading: false });
     this.addInOptions();
   }
 
@@ -136,9 +137,23 @@ class SearchComponent extends Component {
     );
   };
 
+
+  //here (and loading after adding)
+
+
   editRobot = id => () => {
-    this.setState({ setEdit: true, lastEdited: id });
+    this.setState({ setEdit: true });
+    this.findObject(id);
+    console.log(this.state.lastEdited);
   }
+
+  findObject = async (id) => {
+    await api.get(`/${id}`).then((data) => {
+      this.setState({ lastEdited: data.data[0] });
+    });
+  }
+
+  //
 
   hideAdd = ({ loading, fetchSuccess }) => {
     if (loading) {
@@ -164,17 +179,6 @@ class SearchComponent extends Component {
       </div>
     );
   };
-  /*
-    showAdd = () => {
-      return (
-        <div className="addRobot">
-          <AddRobot hideAdd={this.hideAdd} id={this.state["lastEdited"]} />
-        </div>
-      );
-    };
-    */
-
-  //shows the robots from a specific type when a user selects type option
 
   searchByType = (e) => {
     return (
