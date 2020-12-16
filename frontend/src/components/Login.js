@@ -82,7 +82,7 @@ export default class Login extends Component {
                             <form onSubmit={this.handleSubmit}>
                                 <h2 className="d-flex justify-content-center">Login</h2>
                                 <div className="form-group">
-                                    <label htmlFor="username">Username</label>
+                                    <label htmlFor="username">Username / Email</label>
                                     <input type="text" className="form-control" name="username" onChange={this.handleChange} />
                                 </div>
                                 <div className="form-group">

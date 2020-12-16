@@ -41,7 +41,6 @@ const AddUser = (props) => {
                 props.hideAdd({ loading: true })
                 Axios.put(domain + "/users/update/" + values.id, {
                     name: values.name,
-                    password: values.password,
                     email: values.email,
                     classname: values.class
                 }).then(response => {
@@ -66,7 +65,6 @@ const AddUser = (props) => {
         }
     });
 
-    console.log(props)
     return (
         <form onSubmit={formik.handleSubmit} className="addRobotForm" style={{ color: "white" }}>
             <h4>{(props.action === "edit" ? "Edit:" : "Add a new user:")}</h4><br />
@@ -96,7 +94,7 @@ const AddUser = (props) => {
 
                 {formik.touched.email && formik.errors.email ? <span style={{ color: 'red' }}>{formik.errors.email}</span> : <br />}
             </p>
-            <p>
+            <p hidden={props.action==="edit"?true:false}>
                 <label htmlFor="password">Password:</label>
                 <input
                     type="text" name="password" id="password" value={formik.values.password}
