@@ -18,6 +18,9 @@ const validateRobotData = userData => {
     if (!userData.password) {
         errors.password = "User's password is missing";
     }
+    if (!userData.class) {
+        errors.class = "User's class is missing";
+    }
     return errors;
 }
 
@@ -30,7 +33,7 @@ const AddUser = (props) => {
             name: (props.action === "edit" ? user.name : ""),
             email: (props.action === "edit" ? user.email : ""),
             password: (props.action === "edit" ? user.password : ""),
-            class: (props.action === "edit" ? user.class : "")
+            class: (props.action === "edit" ? user.classname : "")
         },
         validate: validateRobotData,
         onSubmit: values => {
@@ -63,6 +66,7 @@ const AddUser = (props) => {
         }
     });
 
+    console.log(props)
     return (
         <form onSubmit={formik.handleSubmit} className="addRobotForm" style={{ color: "white" }}>
             <h4>{(props.action === "edit" ? "Edit:" : "Add a new user:")}</h4><br />
@@ -104,9 +108,11 @@ const AddUser = (props) => {
             <p>
                 <label htmlFor="class">Class:</label>
                 <input
-                    type="text" name="class" id="class" disabled={(formik.values.role === "admin") ? "disabled" : ""} value={(formik.values.role === "admin") ? "/" : formik.values.class}
+                    type="text" name="class" id="class" disabled={formik.values.class === "admin" ? true : false} value={formik.values.class}
                     onChange={formik.handleChange} onBlur={formik.handleBlur}>
-                </input><br />
+                </input>
+                {formik.touched.class && formik.errors.class ? <span style={{ color: 'red' }}>{formik.errors.class}</span> : <br />}
+                <br />
             </p>
             <button type="submit" className="blueBtn" style={{ width: '48%', backgroundColor: "#092768" }}>{(props.action === "edit" ? "Update" : "Add")}</button>&nbsp;
             <button onClick={props.hideAdd} className="calcelAdd" style={{ width: '48%' }}>Cancel</button>
