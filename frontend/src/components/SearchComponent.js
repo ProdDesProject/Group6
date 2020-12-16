@@ -185,7 +185,7 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {this.state.robotsinfo.filter(robot => robot.type === e).map(filteredRobot => (
           <div className="col-md-4" key={filteredRobot.id}>
-            {!this.props.admin && <Link to={`/user/reservation/${filteredRobot.id}`}><RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} /></Link>}
+            {!this.props.admin && <Link to={{pathname:`/user/reservation`, robot: filteredRobot}}><RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} /></Link>}
             {this.props.admin && <RobotCard key={filteredRobot.id} name={filteredRobot.name} url={filteredRobot.url} />}
             {this.showButtons(filteredRobot.id)}
           </div>
@@ -201,7 +201,7 @@ class SearchComponent extends Component {
       <div className="row searchrow">
         {this.state.robotsinfo.map(robot => (
           <div className="col-md-4" key={robot.id}>
-            {!this.props.admin && <Link to={`/user/reservation/${robot.id}`}><RobotCard key={robot.id} name={robot.name} url={robot.url} /></Link>}
+            {!this.props.admin && <Link to={{pathname:`/user/reservation`, robot: robot}}><RobotCard key={robot.id} name={robot.name} url={robot.url} /></Link>}
             {this.props.admin && <RobotCard key={robot.id} name={robot.name} url={robot.url} />}
             {this.showButtons(robot.id)}
           </div>
