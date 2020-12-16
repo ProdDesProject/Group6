@@ -5,6 +5,29 @@ import "react-datepicker/dist/react-datepicker.css";
 import LoadingScreen from "./LoadingScreen";
 import domain from "../domain"
 
+// convert string of array to timve divs
+const convertTime = (str) => {
+    let timeArray = JSON.parse(str);
+    timeArray.sort((a,b)=>{return a-b})
+    console.log(timeArray)
+    let temp = []
+    let start = null;
+    let end = null;
+    for (let i=0; i<timeArray.length; i++ ) {
+       if (start===null) {
+          start = timeArray[i]
+       }
+       if (start!==null && timeArray[i]+1!==timeArray[i+1]) {
+          end = timeArray[i]
+          temp.push({start, end})
+          start = null
+          end = null
+       }
+    }
+    let result = temp.map(i=><><div>{i.start}:00 - {i.end+1}:00</div></>)
+    return result
+ }
+
 const Calendar = (props) => {
     return (
         <DatePicker
@@ -51,7 +74,7 @@ function renderTableData(props) {
                 <td>{reservation.username}</td>
                 <td>{reservation.robotname}</td>
                 <td>{convertDate(reservation.date)}</td>
-                <td>{reservation.time}</td>
+                <td>{convertTime(reservation.time)}</td>
                 <td>
                     <button className="deleteRes" onClick={() => props.confirmation(reservation)}>
                         <i className="far fa-trash-alt" style={{ color: "white" }}></i>
@@ -66,7 +89,7 @@ export default class AdminReservationManagement extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: stubData,
+            data: [],
             usernameFilter: "",
             robotnameFilter: "",
             dateFilter: "",
@@ -199,28 +222,3 @@ const convertDate = (str) => {
     let normalDate = str.substring(8, 10) + "/" + str.substring(5, 7) + "/" + str.substring(0, 4);
     return normalDate;
 }
-
-const stubData = [
-    {
-        id: 1,
-        username: "user1",
-        robotname: "Smart Board",
-        date: "2020-11-25",
-        time: "13:00-14:00"
-    },
-    {
-        id: 2,
-        username: "user2",
-        robotname: "Printing Robot",
-        date: "2020-12-01",
-        time: "11:00-12:00"
-    },
-    {
-        id: 3,
-        username: "user1",
-        robotname: "Cleaning Robot",
-        date: "2020-12-01",
-        time: "10:00-11:00"
-    },
-
-];
