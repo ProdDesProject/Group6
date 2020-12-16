@@ -2,6 +2,7 @@ import domain from "../domain";
 import React, { Component } from "react";
 import AddUser from "./AddUser";
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 const api = axios.create({
     baseURL: domain + "/users"
@@ -19,10 +20,12 @@ class UserManagement extends Component {
             lastEdited: 0,
             emailFilter: "",
             idFilter: "",
-            nameFilter: ""
+            nameFilter: "",
+            loading: false
         }
 
         this.inputChange = this.inputChange.bind(this)
+        this.renderTableData = this.renderTableData.bind(this)
     };
 
     componentDidMount() {
@@ -31,10 +34,8 @@ class UserManagement extends Component {
 
     //get users
     getUsers = async () => {
-        let data = await api.get("/").then(({ data }) =>
-            data);
-        this.setState({ users: data });
-        console.log(this.state.users)
+        this.setState({ loading: true })
+        let data = api.get("/").then(({ data }) => { this.setState({ users: data, loading: false }); })
     }
 
     inputChange = (e) => {
@@ -54,23 +55,46 @@ class UserManagement extends Component {
 
     //shows add user form
 
-    showAdd = (id) => {
+    showAdd = ({ user, action }) => {
         return (
             <div className="addRobot">
-                <AddUser hideAdd={this.hideAdd} id={id} />
+                <AddUser hideAdd={this.hideAdd} user={user} action={action} />
             </div>
         );
     };
 
     //hides add user form 
 
-    hideAdd = () => this.setState({ setAdd: false, setEdit: false });
+    hideAdd = ({ loading, fetchSuccess }) => {
+        if (loading) {
+            this.setState({ loading: true })
+        }
+        else if (fetchSuccess) {
+            axios.get(domain + "/users").then(res => {
+                if (res.status === 200) {
+                    console.log("fetch success");
+                    this.setState({ setAdd: false, setEdit: false, loading: false, users: res.data })
+                }
+            })
+        }
+        else {
+            this.setState({ setAdd: false, setEdit: false })
+        }
+    };
 
     //Deletes a user
 
     deleteUser = async (id) => {
-        let data = api.delete(`/delete/${id}`)
-        this.getUsers();
+        this.setState({ loading: true })
+        let data = api.delete(`/delete/${id}`).then(response => {
+            if (response.status === 200) {
+                console.log("Delete success")
+                this.getUsers();
+            }
+        }).catch(err => {
+            window.alert("Delete failed \n " + err.err)
+            console.log(err.err)
+        })
     }
 
     /*
@@ -83,6 +107,7 @@ class UserManagement extends Component {
     renderTableData = (props) => {
         let data = this.state.users;
         let filtered;
+        console.log(data);
         filtered = data.filter(i => {
             return i.email.toString().toLowerCase().includes(props.email.toLowerCase())
                 && i.id.toString().toLowerCase().includes(props.id.toLowerCase())
@@ -94,7 +119,7 @@ class UserManagement extends Component {
                     <td>{userList.id}</td>
                     <td>{userList.name}</td>
                     <td>{userList.email}</td>
-                    <td>{userList.role}</td>
+                    <td>{userList.classname === "admin" ? "admin" : "student"}</td>
                     <td>{userList.classname}</td>
                     <td>
                         <button className="deleteRes" onClick={() => {
@@ -105,7 +130,7 @@ class UserManagement extends Component {
                             <i className="far fa-trash-alt" style={{ color: "white" }}></i>
                         </button>&nbsp;
                             <button className="editRes" onClick={() => {
-                            this.setState({ setEdit: true, lastEdited: userList.id });
+                            this.setState({ setEdit: true, lastEdited: userList });
                         }}>
                             <i className="fas fa-pencil-alt" style={{ color: "white" }}></i>
                         </button>
@@ -153,9 +178,10 @@ class UserManagement extends Component {
                             )}
                         </tbody>
                     </table>
-                    {this.state.setAdd ? this.showAdd("") : null}
-                    {this.state.setEdit ? this.showAdd(this.state.lastEdited) : null}
+                    {this.state.setAdd ? this.showAdd({ user: null, action: "add" }) : null}
+                    {this.state.setEdit ? this.showAdd({ user: this.state.lastEdited, action: "edit" }) : null}
                 </div>
+                {this.state.loading ? <LoadingScreen /> : null}
             </div>
         )
 

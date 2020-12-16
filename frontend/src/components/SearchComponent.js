@@ -7,6 +7,7 @@ import RobotInfo from "./RobotInfoCard";
 import AddRobot from "./AddRobot";
 import { Link } from 'react-router-dom'
 import axios from "axios";
+import LoadingScreen from "./LoadingScreen";
 
 const api = axios.create({
   baseURL: domain + "/robots"
@@ -19,13 +20,15 @@ class SearchComponent extends Component {
 
     this.state = {
       robotsinfo: [],
+      setEdit: false,
       value: '',
       label: '',
       showInfo: false,
       showAdd: false,
       showInfoId: 0,
-      lastEdited: "",
-      options: {}
+      lastEdited: {},
+      options: {},
+      loading: false
     }
 
     this.mapRobotTypes = this.mapRobotTypes.bind(this);
@@ -39,7 +42,7 @@ class SearchComponent extends Component {
   getRobots = async () => {
     let data = await api.get("/").then(({ data }) =>
       data);
-    this.setState({ robotsinfo: data });
+    this.setState({ robotsinfo: data, loading: false });
     this.addInOptions();
   }
 
@@ -116,7 +119,7 @@ class SearchComponent extends Component {
   deleteRobot(id) {
 
     let data = api
-      .get(`/delete/${id}`)
+      .delete(`/delete/${id}`)
       .catch(err => console.log(err));
     console.log(data);
     this.getRobots();
@@ -134,21 +137,48 @@ class SearchComponent extends Component {
     );
   };
 
+
+  //here (and loading after adding)
+
+
   editRobot = id => () => {
-    this.setState({ showAdd: true, lastEdited: id });
+    this.setState({ setEdit: true });
+    this.findObject(id);
+    console.log(this.state.lastEdited);
   }
 
-  hideAdd = () => this.setState({ showAdd: false });
+  findObject = async (id) => {
+    await api.get(`/${id}`).then((data) => {
+      this.setState({ lastEdited: data.data[0] });
+    });
+  }
 
-  showAdd = () => {
+  //
+
+  hideAdd = ({ loading, fetchSuccess }) => {
+    if (loading) {
+      this.setState({ loading: true })
+    }
+    else if (fetchSuccess) {
+      axios.get(api).then(res => {
+        if (res.status === 200) {
+          console.log("fetch success");
+          this.setState({ setEdit: false, loading: false })
+        }
+      })
+    }
+    else {
+      this.setState({ setEdit: false })
+    }
+  };
+
+  showAdd = ({ user, action }) => {
     return (
       <div className="addRobot">
-        <AddRobot hideAdd={this.hideAdd} id={this.state["lastEdited"]} />
+        <AddRobot hideAdd={this.hideAdd} user={user} action={action} />
       </div>
     );
   };
-
-  //shows the robots from a specific type when a user selects type option
 
   searchByType = (e) => {
     return (
@@ -201,7 +231,8 @@ class SearchComponent extends Component {
         {this.state["value"] === '' && this.showAll()}
         {this.state["value"] !== '' && this.searchByType(this.state.value)}
         {this.state.showInfo ? this.showInfo() : null}
-        {this.state.showAdd ? this.showAdd() : null}
+        {this.state.setEdit ? this.showAdd({ user: this.state.lastEdited, action: "edit" }) : null}
+        {this.state.loading ? <LoadingScreen /> : null}
       </div>
     );
   }

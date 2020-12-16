@@ -27,7 +27,7 @@ router.post('/login', function(req, res) {
         const isValidPassword = yield user.validPassword(password);
         if (isValidPassword) {
             const token = jwt.encode(user.omit('password'), securityConfig.jwtSecret);
-            res.json({success: true, token: `JWT ${token}`, adminStatus: status(parseUser.name), id: user.id});
+            res.json({success: true, token: `JWT ${token}`, adminStatus: status(parseUser.classname), id: user.id});
         } else {
             res.sendStatus(400);
         }

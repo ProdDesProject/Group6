@@ -1,6 +1,7 @@
 import React from "react";
-import robotsinfo from "../robotsInfo";
 import { useFormik } from "formik";
+import Axios from "axios";
+import domain from "../domain"
 
 //validates the information for the new robot
 const validateRobotData = robotData => {
@@ -41,26 +42,46 @@ Add robot form shows when admin clicks on the button and hides when admin clicks
 
 const AddRobotComponent = (props) => {
     var now = new Date();
-    const robot = (props.id ? robotsinfo.find(x => x.id === props.id) : null);
+    const robot = props.robot;
     const formik = useFormik({
         initialValues: {
-            id: (props.id ? robot.id : ""),
-            name: (props.id ? robot.name : ""),
-            imgURL: (props.id ? robot.imgURL : ""),
-            description: (props.id ? robot.description : ""),
-            type: (props.id ? robot.type : "")
+            id: (props.action === "edit" ? robot.id : ""),
+            name: (props.action === "edit" ? robot.name : ""),
+            imgURL: (props.action === "edit" ? robot.url : ""),
+            description: (props.action === "edit" ? robot.description : ""),
+            type: (props.action === "edit" ? robot.type : "")
         },
         validate: validateRobotData,
         onSubmit: values => {
-            if (props.id) {
-                const deleteRobot = robotsinfo.findIndex(function (i) {
-                    return i.id === props.id;
+            if (props.action === "edit") {
+                props.hideAdd({ loading: true })
+                Axios.put(domain + "/robots/update/" + values.id, {
+                    id: robot.id,
+                    name: values.name,
+                    imgURL: values.imgURL,
+                    description: values.description,
+                    type: values.type
+                }).then(response => {
+                    props.hideAdd({ loading: false, fetchSuccess: true });
+                }).catch(err => {
+                    window.alert("Error\n" + err)
                 })
-                robotsinfo.splice(deleteRobot, 1);
             }
-            values.id = now.getFullYear().toString() + now.getMonth().toString() + now.getDate() + now.getHours() + now.getMinutes() + now.getSeconds();
-            robotsinfo.push(values);
-            props.hideAdd();
+            if (props.action === "add") {
+                props.hideAdd({ loading: true })
+                values.id = now.getFullYear().toString() + now.getMonth().toString() + now.getDate() + now.getHours() + now.getMinutes() + now.getSeconds();
+                Axios.post(domain + "/robots/add", {
+                    id: values.id,
+                    name: values.name,
+                    imgURL: values.imgURL,
+                    description: values.description,
+                    type: values.type
+                }).then(response => {
+                    props.hideAdd({ loading: false, fetchSuccess: true });
+                }).catch(err => {
+                    window.alert("Error\n" + err)
+                })
+            }
         }
     });
 
@@ -79,7 +100,7 @@ const AddRobotComponent = (props) => {
             <p>
                 <label htmlFor="imgURL">Image url: </label>
                 <input
-                    type="url" name="imgURL" id="imgURL" value={formik.values.imgURL}
+                    type="text" name="imgURL" id="imgURL" value={formik.values.imgURL}
                     onChange={formik.handleChange} onBlur={formik.handleBlur}>
                 </input>
 
