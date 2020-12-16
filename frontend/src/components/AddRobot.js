@@ -9,27 +9,16 @@ const validateRobotData = robotData => {
     if (!robotData.name) {
         errors.name = "Robot's name is missing";
 
-    } else if (robotData.name.length > 20) {
-        errors.name = 'Name cannot exceed 20 characters';
-    }
-
+    } 
     if (!robotData.description) {
         errors.description = "Robot's description is missing";
-    } else if (robotData.description.length > 100) {
-        errors.description = 'Description can not exceed 100 characters';
-    }
-
+    } 
     if (!robotData.type) {
         errors.type = "Robot's type is missing";
-    } else if (robotData.type.length > 15) {
-        errors.type = 'Type can not exceed 10 characters';
-    }
-
+    } 
     if (!robotData.imgURL) {
         errors.imgURL = "Image's url  is missing"
-    } else if (robotData.imgURL.length > 30) {
-        errors.imgURL = 'Image url can not exceed 30 characters';
-    }
+    } 
 
     return errors;
 }
@@ -58,7 +47,7 @@ const AddRobotComponent = (props) => {
                 Axios.put(domain + "/robots/update/" + values.id, {
                     id: robot.id,
                     name: values.name,
-                    imgURL: values.imgURL,
+                    url: values.imgURL,
                     description: values.description,
                     type: values.type
                 }).then(response => {
@@ -73,7 +62,7 @@ const AddRobotComponent = (props) => {
                 Axios.post(domain + "/robots/add", {
                     id: values.id,
                     name: values.name,
-                    imgURL: values.imgURL,
+                    url: values.imgURL,
                     description: values.description,
                     type: values.type
                 }).then(response => {
